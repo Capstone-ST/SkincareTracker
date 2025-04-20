@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- ☰ Toggle Button (above the sidebar) -->
+<button class="sidebar-toggle-btn" onclick="toggleSidebar()">☰</button>
+
+<div class="homepage-wrapper">
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="{{ url_for('add_product') }}" class="sidebar-btn add-btn">＋</a>
+
+        <nav class="sidebar-nav">
+            <a class="sidebar-link"><span class="icon">❤️</span><br>Collection</a>
+            <a class="sidebar-link" href="{{ url_for('products') }}"><span class="icon">🧴</span><br>Products</a>
+            <a class="sidebar-link"><span class="icon">📅</span><br>Diary</a>
+            <a class="sidebar-link"><span class="icon">⏰</span><br>Reminders</a>
+        </nav>
+    </div>
+
+    <!-- Main content -->
+    <div class="homepage-content">
+        <h1 class="welcome-msg">Hey beautiful 🌸 Welcome back to your skincare journey!</h1>
+
+        <!-- Featured Product Carousel -->
+        <div class="carousel-container">
+            <h2 class="section-title">🌟 Featured Picks</h2>
+            <div class="carousel" id="carousel">
+                <!-- Slides will be inserted here -->
+            </div>
+            <button class="carousel-prev" onclick="prevSlide()">&#10094;</button>
+            <button class="carousel-next" onclick="nextSlide()">&#10095;</button>
+        </div>
+
+        <!-- Today's Log Snapshot -->
+        <div class="daily-log-card">
+            <h2>📝 Today’s Log</h2>
+            <p>Don’t forget to track your routine for glowing results!</p>
+            <a href="#" class="log-btn">Go to Diary</a>
+            <a href="#" class="log-btn">Set Reminders</a>
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar toggle -->
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("closed");
+    }
+</script>
+
+<!-- JS for Featured Product Slideshow -->
+<script>
+    let featuredSlides = [];
+    let featuredIndex = 0;
+
+    function showFeaturedSlide(index) {
+        const carousel = document.getElementById('carousel');
+        carousel.innerHTML = '';
+
+        if (featuredSlides.length > 0) {
+            const product = featuredSlides[index];
+            const slide = document.createElement('div');
+            slide.className = 'slide active';
+            slide.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <div class="caption">
+                    <h3>${product.name}</h3>
+                    <p>${product.ingredients}</p>
+                </div>
+            `;
+            carousel.appendChild(slide);
+        }
+    }
+
+    function nextSlide() {
+        featuredIndex = (featuredIndex + 1) % featuredSlides.length;
+        showFeaturedSlide(featuredIndex);
+    }
+
+    function prevSlide() {
+        featuredIndex = (featuredIndex - 1 + featuredSlides.length) % featuredSlides.length;
+        showFeaturedSlide(featuredIndex);
+    }
+
+    fetch('/api/featured-products')
+        .then(response => response.json())
+        .then(data => {
+            featuredSlides = data;
+            showFeaturedSlide(featuredIndex);
+            setInterval(nextSlide, 5000);
+        });
+</script>
+
+<!-- Carousel styling -->
+<style>
+.homepage-content {
+    padding: 30px;
+    color: #444;
+}
+
+.welcome-msg {
+    font-family: 'Dancing Script', cursive;
+    font-size: 32px;
+    color: #e91e63;
+    margin-bottom: 30px;
+}
+
+.carousel-container {
+    margin-bottom: 40px;
+    position: relative;
+    max-width: 300px; /* was 500px */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.carousel {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 2px solid #f8a8b7;
+    background: #fff;
+    position: relative;
+}
+
+.slide img {
+    width: 100%;
+    height: 180px; /* fixed height for consistent layout */
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+.caption {
+    background: #fff0f5;
+    padding: 8px 12px;
+    text-align: center;
+    border-top: 1px solid #ffc1d3;
+    border-radius: 0 0 12px 12px;
+}
+
+.caption h3 {
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: #e91e63;
+}
+
+.caption p {
+    font-size: 12px;
+    color: #555;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.carousel-prev,
+.carousel-next {
+    position: absolute;
+    top: 40%;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 50%;
+}
+
+.carousel-prev {
+    left: -25px;
+}
+
+.carousel-next {
+    right: -25px;
+}
+
+.daily-log-card {
+    background-color: #fff0f5;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ffc1d3;
+    text-align: center;
+    width: 300px;
+    margin: 40px auto 0 auto;
+}
+
+.daily-log-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.log-btn {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 8px 16px;
+    background-color: #f06292;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+}
+</style>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

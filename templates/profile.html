@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+
+        <!-- Profile Image Upload & Edit Icon -->
+        <div class="profile-picture-frame">
+            <!-- Profile Picture Upload Form -->
+            <form method="POST" action="{{ url_for('upload_profile_picture') }}" enctype="multipart/form-data">
+                <label for="profile-picture-upload">
+                    <img src="{{ url_for('static', filename='images/' + user.picture) }}" alt="Profile Picture" class="profile-pic">
+                    <span class="upload-hover-text">Change Photo</span>
+                </label>
+                <input type="file" id="profile-picture-upload" name="profile_picture" style="display: none;" onchange="this.form.submit()">
+            </form>
+
+            <!-- ✎ icon takes you to edit profile -->
+            <div class="edit-icon" onclick="location.href='{{ url_for('edit_profile') }}'">✎</div>
+        </div>
+
+        <!-- Username -->
+        <h2 class="username">{{ user.username }}</h2>
+
+        <!-- Skin Type -->
+        <div class="skin-type-display">
+            <img src="{{ url_for('static', filename='images/skincare-user-icon.png') }}" alt="Skin Icon" class="skin-icon">
+            <span class="skin-label">{{ user.skintype }} Skin</span>
+        </div>
+
+        <!-- Email + Age -->
+        <div class="profile-details">
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Age:</strong> {{ user.age }}</p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="edit-profile-wrapper">
+    <div class="edit-profile-card">
+        <h2 class="edit-title">Edit Your Profile</h2>
+
+        <!-- Profile Picture Preview -->
+        <div class="edit-picture-frame">
+            <img src="{{ url_for('static', filename='images/' + user.picture) }}" alt="Current Profile" class="edit-profile-pic">
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="edit-form">
+            <label>Email:</label>
+            <input type="text" name="email" value="{{ user.email }}" required>
+
+            <label>Age:</label>
+            <input type="number" name="age" value="{{ user.age }}" required>
+
+            <label>Skin Type:</label>
+            <input type="text" name="skintype" value="{{ user.skintype }}" required>
+
+            <label>Upload New Profile Picture:</label>
+            <input type="file" name="profile_picture" accept="image/*">
+
+            <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+

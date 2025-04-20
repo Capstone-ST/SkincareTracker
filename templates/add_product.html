@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="product-form-wrapper">
+    <div class="form-card">
+        <h2>{{ editing_id and "Edit Product" or "Add New Product" }}</h2>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="name">Product Name:</label>
+                <input type="text" name="name" id="name" value="{{ product.name if product else '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <input type="text" name="type" id="type" value="{{ product.type if product else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="amazon_link">Amazon Link:</label>
+                <input type="text" name="amazon_link" id="amazon_link" value="{{ product.amazon_link if product else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="directions">Directions:</label>
+                <input type="text" name="directions" id="directions" value="{{ product.directions if product else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="shelf_life">Shelf Life (months):</label>
+                <input type="text" name="shelf_life" id="shelf_life" value="{{ product.shelf_life if product else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="ingredients">Ingredients:</label>
+                <textarea name="ingredients" id="ingredients" rows="4">{{ product.ingredients if product else '' }}</textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">💾 Save Product</button>
+        </form>
+    </div>
+</div>
+
+<!--  Floating Back to Home Button -->
+<a href="{{ url_for('homepage') }}" class="floating-back-card">
+    ←<br><strong>Back<br>to<br>Home</strong>
+</a>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.product-form-wrapper {
+    max-width: 600px;
+    margin: 160px auto 40px auto;
+    padding: 20px;
+    position: relative;
+}
+
+.form-card {
+    background-color: #fff0f5;
+    border-radius: 12px;
+    padding: 30px;
+    border: 2px solid #ffc1d3;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.form-card h2 {
+    font-family: 'Dancing Script', cursive;
+    color: #e91e63;
+    font-size: 28px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #555;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ffc1d3;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 14px;
+    font-family: 'Arial', sans-serif;
+    box-sizing: border-box;
+}
+
+.submit-btn {
+    display: block;
+    width: 100%;
+    background-color: #f06292;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.submit-btn:hover {
+    background-color: #e91e63;
+}
+
+/*  Floating Back Card Button */
+.floating-back-card {
+    position: fixed;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    background-color: #ffc1d3;
+    color: white;
+    text-align: center;
+    padding: 14px 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1.6;
+    width: 70px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.floating-back-card:hover {
+    background-color: #f06292;
+}
+</style>
+
+<!-- JS: Auto-fill from API -->
+<script>
+document.getElementById('name').addEventListener('blur', async function () {
+    const name = this.value.trim();
+    if (!name) return;
+
+    const formData = new FormData();
+    formData.append("name", name);
+
+    try {
+        const response = await fetch('/api/get-product-info', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+            console.warn('No data found or error:', result.error);
+            return;
+        }
+
+        document.getElementById('type').value = result.type || '';
+        document.getElementById('amazon_link').value = result.amazon_link || '';
+        document.getElementById('directions').value = result.directions || '';
+        document.getElementById('shelf_life').value = result.shelf_life || '';
+        document.getElementById('ingredients').value = result.ingredients || '';
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
+});
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Skincare Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+{% if request.path == '/login' %}
+    <!--  Decorative corner flowers (login only) -->
+    <img src="{{ url_for('static', filename='images/flower-corner.png') }}" class="corner-flower left" alt="Flower Corner">
+    <img src="{{ url_for('static', filename='images/flower-corner.png') }}" class="corner-flower right" alt="Flower Corner">
+{% endif %}
+
+<!--  Navbar -->
+<div class="navbar">
+    <h2>Skincare Tracker</h2>
+    <div class="wave-overlay"></div>
+
+
+    {% if session.get('user_id') %}
+    <div class="user-dropdown">
+        <img src="{{ url_for('static', filename='images/skincare-user-icon.png') }}" alt="User" class="user-icon" onclick="toggleDropdown()">
+        <div class="dropdown-menu" id="dropdownMenu">
+    <a href="{{ url_for('homepage') }}">Homepage</a>
+    <a href="{{ url_for('profile') }}">Profile</a>
+    <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+
+    </div>
+    {% endif %}
+</div>
+
+{% if request.path == '/login' or request.path == '/homepage' %}
+<div class="curve-divider"></div>
+{% endif %}
+
+
+<!--  Affirmation & Purpose only on login -->
+{% if request.path == '/login' %}
+<div class="top-message-area">
+    <div class="affirmation-slider">
+        <div class="affirmation active">You are glowing from the inside out ✨</div>
+        <div class="affirmation">Skincare is self-love 💖</div>
+        <div class="affirmation">Confidence starts with care 🌷</div>
+        <div class="affirmation">Hydrated skin, happy you 💦</div>
+        <div class="affirmation">You're beautiful — today and every day 💕</div>
+    </div>
+
+    <div class="purpose-slider">
+        <div class="purpose active">Track your daily skincare routine</div>
+        <div class="purpose">Log and review the products that work for you</div>
+        <div class="purpose">Visualize progress with diaries and photos</div>
+        <div class="purpose">Get reminders so you never skip your glow 💡</div>
+        <div class="purpose">Feel confident in your unique skincare journey 💫</div>
+    </div>
+</div>
+{% endif %}
+
+<!--  Page Content -->
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<!--  Slideshow script -->
+<script>
+    let affirmations = document.querySelectorAll('.affirmation');
+    let purposes = document.querySelectorAll('.purpose');
+    let affIndex = 0, purpIndex = 0;
+
+    function rotateAffirmations() {
+        affirmations[affIndex].classList.remove('active');
+        affIndex = (affIndex + 1) % affirmations.length;
+        affirmations[affIndex].classList.add('active');
+    }
+
+    function rotatePurposes() {
+        purposes[purpIndex].classList.remove('active');
+        purpIndex = (purpIndex + 1) % purposes.length;
+        purposes[purpIndex].classList.add('active');
+    }
+
+    setInterval(rotateAffirmations, 4000);
+    setInterval(rotatePurposes, 5000);
+</script>
+
+<!--  Dropdown toggle -->
+<script>
+    function toggleDropdown() {
+        const menu = document.getElementById("dropdownMenu");
+        menu.classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.matches('.user-icon')) {
+            const dropdowns = document.getElementsByClassName("dropdown-menu");
+            for (let i = 0; i < dropdowns.length; i++) {
+                dropdowns[i].classList.remove("show");
+            }
+        }
+    };
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
