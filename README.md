@@ -32,3 +32,8 @@ A skincare tracking app built with Flask. It lets users log products, view ingre
     - Click Open Database
     - In the top-left corner, click File > Open Database
     - A file dialog will appear — navigate to your project folder and select the skincare.db file
+  
+# Screenshots of the Website
+
+# Login Page:
+![View](assets/Loginpage.gif)
