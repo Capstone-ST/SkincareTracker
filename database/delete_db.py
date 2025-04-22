@@ -1,7 +1,7 @@
 import os
 import sqlite3
 
-def delete_db(database_file="/skincare.db"):
+def delete_db(database_file="skincare.db"):
     # Get the directory where this script is located
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -32,4 +32,4 @@ def delete_db(database_file="/skincare.db"):
 
 
 if __name__ == "__main__":
-    delete_db(database_file="/skincare.db")
+    delete_db(database_file="skincare.db")
