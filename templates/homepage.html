@@ -11,16 +11,17 @@
         <a href="{{ url_for('add_product') }}" class="sidebar-btn add-btn">＋</a>
 
         <nav class="sidebar-nav">
-            <a class="sidebar-link"><span class="icon">❤️</span><br>Collection</a>
-            <a class="sidebar-link" href="{{ url_for('products') }}"><span class="icon">🧴</span><br>Products</a>
-            <a class="sidebar-link"><span class="icon">📅</span><br>Diary</a>
+            <a class="sidebar-link" href="{{ url_for('all_products') }}"><span class="icon">🧴🧴</span><br>All Products</a>
+            <a class="sidebar-link"><span class="icon">❤️</span><br>Product Collection</a>
+            <a class="sidebar-link" href="{{ url_for('products') }}"><span class="icon">🧴</span><br>Your Product Information</a>
+            <a class="sidebar-link" href="{{ url_for('diary') }}"><span class="icon">📅</span><br>Diary</a>
             <a class="sidebar-link"><span class="icon">⏰</span><br>Reminders</a>
         </nav>
     </div>
 
     <!-- Main content -->
     <div class="homepage-content">
-        <h1 class="welcome-msg">Hey beautiful 🌸 Welcome back to your skincare journey!</h1>
+        <h1 class="welcome-msg"> 🌸 ✨ Welcome back gorgeous! ✨ 🌸 </h1>
 
         <!-- Featured Product Carousel -->
         <div class="carousel-container">
@@ -36,7 +37,7 @@
         <div class="daily-log-card">
             <h2>📝 Today’s Log</h2>
             <p>Don’t forget to track your routine for glowing results!</p>
-            <a href="#" class="log-btn">Go to Diary</a>
+            <a href="/diary" class="log-btn">Go to Diary</a>
             <a href="#" class="log-btn">Set Reminders</a>
         </div>
     </div>

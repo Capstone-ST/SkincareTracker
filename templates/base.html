@@ -18,21 +18,20 @@
 <div class="navbar">
     <h2>Skincare Tracker</h2>
     <div class="wave-overlay"></div>
-
+    <br>
 
     {% if session.get('user_id') %}
     <div class="user-dropdown">
         <img src="{{ url_for('static', filename='images/skincare-user-icon.png') }}" alt="User" class="user-icon" onclick="toggleDropdown()">
         <div class="dropdown-menu" id="dropdownMenu">
-    <a href="{{ url_for('homepage') }}">Homepage</a>
-    <a href="{{ url_for('profile') }}">Profile</a>
-    <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
-</div>
-
-    </div>
+            <a href="{{ url_for('homepage') }}">Homepage</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+            <a href="{{ url_for('logout') }}">Logout</a>            
+        </div>
+    </div> 
     {% endif %}
-</div>
+</div> 
 
 {% if request.path == '/login' or request.path == '/homepage' %}
 <div class="curve-divider"></div>

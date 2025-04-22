@@ -10,6 +10,29 @@ app.secret_key = "secret_key"
 UPLOAD_FOLDER = os.path.join("static", "images")
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
+
+# Simulated product database
+product_data = {
+    "Cerave Moisturizing Cream": {
+        "type": "Moisturizer",
+        "amazon_link": "https://www.amazon.com/CeraVe-Moisturizing-Moisturizer-Niacinamide-Comedogenic/dp/B0CTTDLQF3/ref=sr_1_10?dib=eyJ2IjoiMSJ9.7orYTXdgOhWduRzEmj8bg5O48rW_SUUDgZasDi-RUmIr9_bqJWIYT-nEtbzwAway31FIkRhyUgW2zZh6cqtnGeftdRGZoqtbIWH_6u-h3yXxvZBDoeN-qiF3hyagEyZw-KU5CKoYUcDv_-cBSDMLirmRMj-F9GzBG77mtmRbqvDJ8VgyekXLZk8-Ad3UszxvYrPg1kIlFfKNrvHXr1awlPxTvULppqJE2owEgmcN8wVJT4fuVl9HgEIhsmxCi68FrjF92fGi2WWzKHa69OoCyiA4z66bX6cajMzszIuA_6c.oXCe0wC75WMJnj7Lr67py-x1X2RS0S0AIYDeFat2HDw&dib_tag=se&keywords=cerave+daily+moisturizing+lotion&qid=1745268145&sr=8-10",
+        "directions": "Apply to face and body as needed.",
+        "shelf_life": "18 months",
+        "ingredients": "Water, Ceramides, Glycerin",
+        "image": "cerave.jpeg",
+
+    },
+    "Cerave Facial Moisturizing Lotion SPF 30": {
+        "type": "Sunscreen",
+        "amazon_link": "https://www.amazon.com/CeraVe-Moisturizing-Cream-Daily-Moisturizer/dp/B00TTD9BRC/ref=sr_1_5?crid=3JAIJT4ITK4FW&dib=eyJ2IjoiMSJ9.j7IYE0WXjFEUyEP4FpoxoLBhj0s6oEGXsay5eHgv9eoVhNfnTYboImXGHu-qYRFSQn6anJ8UvQspR8PTErxr2L2dGJq1lddufuAThTMl_3qA9iLABWEP1nMz9n4oKAFVWD5ioeZtrpjf93WE9qn-pahiU2x8s_1mc4I3wL1rkqwtbPdZaSw9S9lxROXCzPLR3EjsbIugXA4X60eRi1HPs9ApcYKJ6clOX-PduEHWgrHrURw0SHsdZrvorlBcYF1xVCCHU7SNX2CsgkemypgCCBOCBZZLOdV4NeeDM8TjGCo.fTMnliWZcekReiH5My1AW2k6pGemFafltkoRlQEFMvs&dib_tag=se&keywords=cerave%2Bdaily%2Bmoisturizing%2Bcream&qid=1745268178&sprefix=cerave%2Bdaily%2Bmoisturizing%2Bcre%2Caps%2C168&sr=8-5&th=1",
+        "directions": "Apply 15 minutes before sun exposure.",
+        "shelf_life": "12 months",
+        "ingredients": "Water, Zinc Oxide, Ceramides",
+        "image": "ceravedailysunscreen.jpeg"
+    }
+}
+
+
 # Simulated INCIdecoder ingredient database
 ingredient_database = {
     "niacinamide": {
@@ -58,6 +81,31 @@ def init_db():
                 FOREIGN KEY (user_id) REFERENCES Users(user_id)
             )
         ''')
+
+        # Diary table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Diary (
+                diary_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                entry_date TEXT NOT NULL,
+                entry_time TEXT,
+                products TEXT,
+                acne BOOLEAN,
+                notes TEXT,
+                shared BOOLEAN
+    );
+        ''')
+
+        # Diary Products table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS diary_products (
+                diary_id INTEGER,
+                product_id INTEGER,
+                PRIMARY KEY (diary_id, product_id),
+                FOREIGN KEY (diary_id) REFERENCES diary(id) ON DELETE CASCADE,
+                FOREIGN KEY (product_id) REFERENCES product(id) ON DELETE CASCADE
+    );
+        ''')
+
         conn.commit()
 
 @app.route('/')
@@ -127,6 +175,38 @@ def profile():
         'skintype': user[3],
         'picture': user[4]
     })
+
+@app.route('/diary')
+def diary():
+    if 'user_id' not in session:
+        return redirect('/login')
+    return render_template('diary.html')
+
+
+@app.route('/all_products')
+def all_products():
+    if 'user_id' not in session:
+        return redirect('/login')
+    return render_template('all_products.html')
+
+
+@app.route('/product/<product_name>')
+def product_info(product_name):
+    product = product_data.get(product_name)
+    return render_template('product_info.html', product_name=product_name, product=product)
+
+
+@app.route('/product/<product_name>/review', methods=['GET', 'POST'])
+def write_review(product_name):
+    if request.method == 'POST':
+        review_text = request.form.get('review')
+        print(f"Review for {product_name}: {review_text}")
+        return redirect(url_for('product_info', product_name=product_name))
+    
+    product = product_data.get(product_name)
+    return render_template('review_form.html', product_name=product_name, product=product)
+
+
 
 @app.route('/upload-profile-picture', methods=['POST'])
 def upload_profile_picture():

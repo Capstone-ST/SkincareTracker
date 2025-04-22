@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<a href="{{ url_for('all_products') }}" class="corner-back-btn">← Back to All Products</a>
+
+
+<div style="text-align: center; margin-top: 30px;">
+    <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product_name }}" style="max-width: 300px; border-radius: 12px; margin-bottom: 20px;">
+    <h1 style="margin-top: 0;">{{ product_name }}</h1>
+    <table class="product-details">
+        <tr>
+            <th>Product Name</th>
+            <td>{{ product_name }}</td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td>{{ product.type }}</td>
+        </tr>
+        <tr>
+            <th>Amazon Link</th>
+            <td><a href="{{ product.amazon_link }}" target="_blank">Buy on Amazon</a></td>
+        </tr>
+        <tr>
+            <th>Directions</th>
+            <td>{{ product.directions }}</td>
+        </tr>
+        <tr>
+            <th>Shelf Life (months)</th>
+            <td>{{ product.shelf_life }}</td>
+        </tr>
+        <tr>
+            <th>Ingredients</th>
+            <td>{{ product.ingredients }}</td>
+        </tr>
+    </table>
+    <form action="{{ url_for('write_review', product_name=product_name) }}" method="get">
+        <button type="submit" class="review-btn">📝 Write a Review</button>
+    </form>
+</div>
+
+
+<style>
+    .corner-back-btn {
+        position: fixed;
+        top: 100px;
+        left: 20px;
+        background-color: #ffc1d3;
+        color: white;
+        font-weight: bold;
+        padding: 10px 18px;
+        border-radius: 10px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 14px;
+        z-index: 999;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: background 0.2s ease-in-out;
+}
+
+
+    .corner-back-btn:hover {
+        background-color: #f06292;
+}
+
+
+.product-details {
+    width: 100%;
+    max-width: 700px;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: #fff0f5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.product-details th,
+.product-details td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ffc1d3;
+    text-align: left;
+}
+
+.product-details th {
+    background-color: #ffe4ec;
+    font-weight: bold;
+    color: #5e0b1f;
+}
+.review-btn {
+        display: block;
+        width: 100%;
+        background-color: #f06292;
+        color: white;
+        font-weight: bold;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
+</style>
+
+{% endblock %}
+
