@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+
+<a href="{{ url_for('product_info', product_name=product_name) }}" class="corner-back-btn">← Back to {{ product_name }}</a>
+<div style="text-align: center; margin-top: 30px;">
+    <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product_name }}" style="max-width: 300px; border-radius: 12px; margin-bottom: 20px;">
+    <h1 style="margin-top: 0;">Write a review for {{ product_name }}</h1>
+    <form method="POST" class="review-form">
+    <label for="review">Your Review:</label>
+    <textarea name="review" id="review" rows="5" placeholder="Share your experience with this product." required></textarea>
+    <label for="rating">How many stars would you give this product?</label>
+    <select name="rating" id="rating">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <button type="submit" class="submit-btn">Submit Review</button>
+    </form>
+</div>
+
+<style>
+
+.review-form {
+        max-height: 500px;
+        overflow-y: auto;
+        border-radius: 20px;
+        border: 2px solid #a3143d;
+        background: #f2dae2;
+        padding: 40px;
+    }
+.corner-back-btn {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    background-color: #ffc1d3;
+    color: white;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: background 0.2s ease-in-out;
+}
+
+
+    
+.submit-btn {
+        display: block;
+        width: 100%;
+        background-color: #f06292;
+        color: white;
+        font-weight: bold;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+    }
+
+.corner-back-btn:hover {
+    background-color: #f06292;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  gap: 16px; /* space between fields */
+}
+
+.review-form textarea,
+.review-form select,
+.review-form button {
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #b46464;
+}
+
+</style>
+{% endblock %}
