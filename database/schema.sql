@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS Users (
     email TEXT UNIQUE NOT NULL,
     age INTEGER,
     skintype TEXT,
-    picture TEXT
+    profile_pic TEXT
 );
 
 -- Products table with UNIQUE product_name
@@ -20,7 +20,9 @@ CREATE TABLE IF NOT EXISTS Products (
     amazon_link TEXT,
     directions TEXT,
     shelflife INTEGER,
-    ingredients TEXT
+    ingredients TEXT,
+    product_pic TEXT
+    
 );
 
 -- Collections table (user_id + product_id should be unique together)
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS Diaries (
     acne BOOLEAN,          
     adverse BOOLEAN,        
     diary_note TEXT,
-    photo TEXT,
+    diary_photo TEXT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
@@ -57,7 +59,7 @@ CREATE TABLE IF NOT EXISTS Reviews (
     stars INTEGER CHECK(stars BETWEEN 1 AND 5),
     review_note TEXT,
     repurchase BOOLEAN,    
-    photo TEXT,
+    review_photo TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id),
@@ -78,12 +80,12 @@ CREATE TABLE IF NOT EXISTS Reminders (
 );
 
 -- Insert data into Users table
-INSERT INTO Users (username, password, email, age, skintype, picture) VALUES
+INSERT INTO Users (username, password, email, age, skintype, profile_pic) VALUES
 ('raisa', 'password123', 'raisa@gmail.com', 24, 'Oily', 'flower-corner.PNG'),
 ('admin', '123', 'admin@gmail.com', 23, 'Dry', 'default.png'),
 ('epicsaif', '123', 'epicsaif@gmail.com', 23, 'Dry', 'default.png');
 
-INSERT INTO Users (username, password, email, age, skintype, picture) VALUES
+INSERT INTO Users (username, password, email, age, skintype, profile_pic) VALUES
 ('skincareQueen', 'pass1234', 'queen@example.com', 25, 'oily', 'pic1.jpg'),
 ('glowGetter', 'glowUp2023', 'glow@example.com', 31, 'dry', 'pic2.jpg'),
 ('acneWarrior', 'securePass!', 'acne_w@example.com', 20, 'combination', 'pic3.jpg'),
@@ -124,7 +126,7 @@ INSERT INTO Collections (user_id, product_id, created_at) VALUES
 (5, 4, '2025-04-02 09:35:00');
 
 -- Insert sample diary entries
-INSERT INTO Diaries (user_id, date, product_id, body_part, acne, adverse, diary_note, photo) VALUES
+INSERT INTO Diaries (user_id, date, product_id, body_part, acne, adverse, diary_note, diary_photo) VALUES
 (1, '2025-04-20 09:00:00', 1, 'face', 2, 0, 'Skin feels smooth after wash.', 'diary1.jpg'),
 (2, '2025-04-19 08:30:00', 3, 'forehead', 1, 0, 'Noticed less redness today.', 'diary2.jpg'),
 (3, '2025-04-18 21:00:00', 2, 'cheeks', 4, 1, 'Feels greasy, slight breakout.', 'diary3.jpg'),
@@ -132,7 +134,7 @@ INSERT INTO Diaries (user_id, date, product_id, body_part, acne, adverse, diary_
 (5, '2025-04-19 22:00:00', 4, 'neck', 0, 0, 'Soothing, no irritation.', 'diary5.jpg');
 
 -- Insert sample reviews
-INSERT INTO Reviews (user_id, product_id, stars, review_note, repurchase, photo) VALUES
+INSERT INTO Reviews (user_id, product_id, stars, review_note, repurchase, review_photo) VALUES
 (1, 1, 5, 'Love how gentle it is.', 1, 'review1.jpg'),
 (2, 3, 4, 'Nice serum but takes time.', 1, 'review2.jpg'),
 (3, 2, 2, 'Made my skin worse.', 0, 'review3.jpg'),

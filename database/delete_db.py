@@ -17,7 +17,7 @@ def delete_db(database_file="skincare.db"):
             DROP TABLE IF EXISTS Reviews;
         """)
         cursor.execute("""
-            DROP TABLE IF EXISTS Diarys;
+            DROP TABLE IF EXISTS Diaries;
         """)
         cursor.execute("""
             DROP TABLE IF EXISTS Collections;
