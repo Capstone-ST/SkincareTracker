@@ -29,6 +29,8 @@ def delete_db(database_file="skincare.db"):
             DROP TABLE IF EXISTS Users;
         """)
         conn.commit()
+    if conn:
+        conn.close()
 
 
 if __name__ == "__main__":

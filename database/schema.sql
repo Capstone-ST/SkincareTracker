@@ -1,21 +1,21 @@
 PRAGMA foreign_keys = OFF;
 
 
--- Create Users table
+-- Users table with UNIQUE constraints
 CREATE TABLE IF NOT EXISTS Users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT,
-    password TEXT,
-    email TEXT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
     age INTEGER,
     skintype TEXT,
     picture TEXT
 );
 
--- Create Products table
+-- Products table with UNIQUE product_name
 CREATE TABLE IF NOT EXISTS Products (
     product_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    product_name TEXT,
+    product_name TEXT UNIQUE NOT NULL,
     type TEXT,
     amazon_link TEXT,
     directions TEXT,
@@ -23,56 +23,59 @@ CREATE TABLE IF NOT EXISTS Products (
     ingredients TEXT
 );
 
--- Create Collections table
+-- Collections table (user_id + product_id should be unique together)
 CREATE TABLE IF NOT EXISTS Collections (
     collection_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    product_id INTEGER,
+    user_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
     created_at DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+    FOREIGN KEY (product_id) REFERENCES Products(product_id),
+    UNIQUE(user_id, product_id)
 );
 
--- Create Diarys table
-CREATE TABLE IF NOT EXISTS Diarys (
+-- Diaries table with BOOLEAN fields and correct spelling
+CREATE TABLE IF NOT EXISTS Diaries (
     diary_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
+    user_id INTEGER NOT NULL,
     date TIMESTAMP,
     product_id INTEGER,
     body_part TEXT,
-    acne INTEGER,
-    adverse INTEGER,
-    diary_note TEXT, -- Content of the post
+    acne BOOLEAN,          
+    adverse BOOLEAN,        
+    diary_note TEXT,
     photo TEXT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 
--- Create Reviews table
+-- Reviews table with BOOLEAN repurchase and timestamp
 CREATE TABLE IF NOT EXISTS Reviews (
     review_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    product_id INTEGER,
-    stars INTEGER,
+    user_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    stars INTEGER CHECK(stars BETWEEN 1 AND 5),
     review_note TEXT,
-    repurchase INTEGER,
+    repurchase BOOLEAN,    
     photo TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+    FOREIGN KEY (product_id) REFERENCES Products(product_id),
+    UNIQUE(user_id, product_id)
 );
 
--- Create Reminders table
+-- Reminders table 
 CREATE TABLE IF NOT EXISTS Reminders (
     reminder_id INTEGER PRIMARY KEY AUTOINCREMENT,
     reminder_type TEXT,
     alarm_date DATETIME,
-    reoccurence FLOAT,
-    user_id INTEGER,
+    recurrence FLOAT,  
+    reminder_note TEXT,  
+    user_id INTEGER NOT NULL,
     product_id INTEGER,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
-
 
 -- Insert data into Users table
 INSERT INTO Users (username, password, email, age, skintype, picture) VALUES
@@ -103,6 +106,11 @@ INSERT INTO Products (product_name, type, amazon_link, directions, shelflife, in
 ('La Roche-Posay Moisturizer', 'moisturizer', 'https://amazon.com/la-roche-moist', 'Apply after cleansing.', 24, 'shea butter, glycerin'),
 ('Paulas Choice BHA', 'exfoliant', 'https://amazon.com/paulas-choice-bha', 'Use every other night.', 24, 'salicylic acid, green tea');
 
+INSERT INTO Products (product_name, type, amazon_link, directions, shelflife, ingredients) VALUES
+('Cerave Moisturizing Cream','Moisturizer','https://www.amazon.com/CeraVe-Moisturizing-Moisturizer-Niacinamide-Comedogenic/dp/B0CTTDLQF3/ref=sr_1_10?...','Apply to face and body as needed.',18,'Water, Ceramides, Glycerin'),
+('Cerave Facial Moisturizing Lotion SPF 30','Sunscreen','https://www.amazon.com/CeraVe-Moisturizing-Cream-Daily-Moisturizer/dp/B00TTD9BRC/ref=sr_1_5?...','Apply 15 minutes before sun exposure.',12,'Water, Zinc Oxide, Ceramides'),
+('Niacinamide','Serum','https://www.amazon.com/dp/B079DFPZPJ','Apply morning and night',12,'Niacinamide, Zinc PCA, Water'),
+('Salicylic Acid','Cleanser','https://www.amazon.com/dp/B00LW2GM84','Use in evening',9,'Salicylic Acid, Glycerin, Water');
 
 
 
@@ -116,7 +124,7 @@ INSERT INTO Collections (user_id, product_id, created_at) VALUES
 (5, 4, '2025-04-02 09:35:00');
 
 -- Insert sample diary entries
-INSERT INTO Diarys (user_id, date, product_id, body_part, acne, adverse, diary_note, photo) VALUES
+INSERT INTO Diaries (user_id, date, product_id, body_part, acne, adverse, diary_note, photo) VALUES
 (1, '2025-04-20 09:00:00', 1, 'face', 2, 0, 'Skin feels smooth after wash.', 'diary1.jpg'),
 (2, '2025-04-19 08:30:00', 3, 'forehead', 1, 0, 'Noticed less redness today.', 'diary2.jpg'),
 (3, '2025-04-18 21:00:00', 2, 'cheeks', 4, 1, 'Feels greasy, slight breakout.', 'diary3.jpg'),
@@ -133,7 +141,7 @@ INSERT INTO Reviews (user_id, product_id, stars, review_note, repurchase, photo)
 
 
 -- Insert sample reminders
-INSERT INTO Reminders (reminder_type, alarm_date, reoccurence, user_id, product_id) VALUES
+INSERT INTO Reminders (reminder_type, alarm_date, recurrence, user_id, product_id) VALUES
 ('Morning Routine', '2025-04-21 08:00:00', 1, 1, 1),
 ('Night Serum', '2025-04-21 21:00:00', 1, 2, 3),
 ('Sunscreen', '2025-04-21 13:00:00', 1, 3, 2),

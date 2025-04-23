@@ -5,6 +5,14 @@ import requests
 from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.utils import secure_filename
 
+import database.create_db
+
+import templates.product.appProduct as appProduct
+import templates.user.appUser as appUser
+
+st_db = "skincare.db"  # short for skintracker database
+
+
 app = Flask(__name__)
 app.secret_key = "secret_key"
 UPLOAD_FOLDER = os.path.join("static", "images")
@@ -111,36 +119,25 @@ def init_db():
 
 @app.route("/")
 def index():
-    return redirect("/login")
+    return redirect("/homepage")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     error = None
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        session["user_id"] = appUser.login_user(session, error=error)
+        return render_template("/homepage.html")
+    return render_template("/user/login.html", error=error)
 
-        with sqlite3.connect("skincare.db") as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                "SELECT * FROM Users WHERE username=? AND password=?",
-                (username, password),
-            )
-            user = cursor.fetchone()
 
-        if user:
-            session["user_id"] = user[0]
-            return redirect("/homepage")
-        error = "Invalid username or password"
-    return render_template("login.html", error=error)
 
 
 @app.route("/homepage")
 def homepage():
     if "user_id" not in session:
         return redirect("/login")
-    return render_template("homepage.html")
+    return render_template("/homepage.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -168,7 +165,7 @@ def register():
             except sqlite3.IntegrityError:
                 error = "Username already exists."
 
-    return render_template("register.html", error=error)
+    return render_template("/user/register.html", error=error)
 
 
 @app.route("/profile")
@@ -183,7 +180,7 @@ def profile():
         )
         user = cursor.fetchone()
     return render_template(
-        "profile.html",
+        "/user/profile.html",
         user={
             "username": user[0],
             "email": user[1],
@@ -198,21 +195,21 @@ def profile():
 def diary():
     if "user_id" not in session:
         return redirect("/login")
-    return render_template("diary.html")
+    return render_template("/diary/diary.html")
 
 
 @app.route("/all_products")
 def all_products():
     if "user_id" not in session:
         return redirect("/login")
-    return render_template("all_products.html")
+    return render_template("/product/all_products.html")
 
 
 @app.route("/product/<product_name>")
 def product_info(product_name):
     product = product_data.get(product_name)
     return render_template(
-        "product_info.html", product_name=product_name, product=product
+        "/product/product_info.html", product_name=product_name, product=product
     )
 
 
@@ -225,7 +222,7 @@ def write_review(product_name):
 
     product = product_data.get(product_name)
     return render_template(
-        "review_form.html", product_name=product_name, product=product
+        "review/review_form.html", product_name=product_name, product=product
     )
 
 
@@ -279,7 +276,7 @@ def edit_profile():
         data = cursor.fetchone()
 
     return render_template(
-        "edit_profile.html",
+        "/user/edit_profile.html",
         user={
             "email": data[0],
             "age": data[1],
@@ -366,7 +363,7 @@ def add_product():
                 }
 
     return render_template(
-        "add_product.html", product=product_data, editing_id=product_id
+        "/product/add_product.html", product=product_data, editing_id=product_id
     )
 
 
@@ -507,7 +504,7 @@ def products():
         )
         product_list = cursor.fetchall()
 
-    return render_template("products.html", products=product_list)
+    return render_template("/product/products.html", products=product_list)
 
 
 @app.route("/logout")
