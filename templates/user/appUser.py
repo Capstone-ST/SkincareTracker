@@ -5,7 +5,7 @@ import requests
 from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.utils import secure_filename
 
-import database.conn_db
+# import database.conn_db
 
 st_db = "./database/skincare.db"  # short for skintracker database
 # db_connection = database.conn_db(st_db)
