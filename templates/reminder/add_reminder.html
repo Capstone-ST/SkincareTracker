@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Add Reminder{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Add a New Reminder</h2>
+    <form action="{{ url_for('add_reminder') }}" method="POST">
+        <div class="mb-3">
+            <label for="reminder_type" class="form-label">Reminder Type</label>
+            <input type="text" class="form-control" id="reminder_type" name="reminder_type" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="alarm_date" class="form-label">Alarm Date & Time</label>
+            <input type="datetime-local" class="form-control" id="alarm_date" name="alarm_date" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="recurrence" class="form-label">Recurrence (days)</label>
+            <input type="number" class="form-control" id="recurrence" name="recurrence" min="1" value="1" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="product_id" class="form-label">Product (optional)</label>
+            <select class="form-select" id="product_id" name="product_id">
+                <option value="">-- None --</option>
+                {% for product in products %}
+                <option value="{{ product.product_id }}">{{ product.product_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Reminder</button>
+        <a href="{{ url_for('reminders') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

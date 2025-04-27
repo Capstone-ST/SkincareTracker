@@ -128,10 +128,10 @@ INSERT INTO Collections (user_id, product_id, created_at) VALUES
 -- Insert sample diary entries
 INSERT INTO Diaries (user_id, date, product_id, body_part, acne, adverse, diary_note, diary_photo) VALUES
 (1, '2025-04-20 09:00:00', 1, 'face', 2, 0, 'Skin feels smooth after wash.', 'diary1.jpg'),
-(2, '2025-04-19 08:30:00', 3, 'forehead', 1, 0, 'Noticed less redness today.', 'diary2.jpg'),
-(3, '2025-04-18 21:00:00', 2, 'cheeks', 4, 1, 'Feels greasy, slight breakout.', 'diary3.jpg'),
-(4, '2025-04-20 07:45:00', 5, 'chin', 3, 0, 'Tingling sensation but tolerable.', 'diary4.jpg'),
-(5, '2025-04-19 22:00:00', 4, 'neck', 0, 0, 'Soothing, no irritation.', 'diary5.jpg');
+(1, '2025-04-19 08:30:00', 3, 'forehead', 1, 0, 'Noticed less redness today.', 'diary2.jpg'),
+(1, '2025-04-18 21:00:00', 2, 'cheeks', 4, 1, 'Feels greasy, slight breakout.', 'diary3.jpg'),
+(1, '2025-04-20 07:45:00', 5, 'chin', 3, 0, 'Tingling sensation but tolerable.', 'diary4.jpg'),
+(1, '2025-04-19 22:00:00', 4, 'neck', 0, 0, 'Soothing, no irritation.', 'diary5.jpg');
 
 -- Insert sample reviews
 INSERT INTO Reviews (user_id, product_id, stars, review_note, repurchase, review_photo) VALUES

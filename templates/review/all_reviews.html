@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Back to Home Floating Button -->
+<a href="/homepage" class="corner-back-btn">← Back to Home</a>
+
+<!-- Page Title -->
+<div style="text-align: center;">
+<h1 class="page-title">🧴 All Reviews</h1><br>
+<div class="review-scroll-wrapper">
+  <div class="review-grid">
+      {% for review in reviews_list %}
+      <div class="review-card">
+        <h3>{{ review.review_name }}</h3>
+        <h3>{{ review.review_note}}</h3>
+        <h3>{{ review.review_photo }}</h3>
+      </div>
+      {% endfor %}
+
+  </div>
+</div>
+
+{% endblock %}

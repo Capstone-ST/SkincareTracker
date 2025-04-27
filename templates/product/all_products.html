@@ -2,39 +2,21 @@
 
 {% block content %}
 <!-- Back to Home Floating Button -->
-<a href="{{ url_for('homepage') }}" class="corner-back-btn">← Back to Home</a>
+<a href="/homepage" class="corner-back-btn">← Back to Home</a>
 
 <!-- Page Title -->
 <div style="text-align: center;">
 <h1 class="page-title">🧴 All Products</h1><br>
 <div class="product-scroll-wrapper">
 <div class="product-grid">
+    {% for product in products_list %}
     <div class="product-card">
-      <img src="{{ url_for('static', filename='images/cerave.jpeg') }}" alt="Cerave Moisturizing Cream">
-      <h3>Cerave Moisturizing Cream</h3>
-      <form action="{{ url_for('product_info', product_name='Cerave Moisturizing Cream') }}" method="get">
-        <button type="submit" class="view-btn">🔍 View Product</button>
-      </form>
+      <h3>{{ product.product_name }}</h3>
+      <h3>{{ product.amazon_link}}</h3>
+      <h3>{{ product.ingredients }}</h3>
     </div>
-  
-    <div class="product-card">
-      <img src="{{ url_for('static', filename='images/ceravedailysunscreen.jpeg') }}" alt="Cerave Facial Moisturizing Lotion SPF 30">
-      <h3>Cerave Facial Moisturizing Lotion SPF 30</h3>
-      <form action="{{ url_for('product_info', product_name='Cerave Facial Moisturizing Lotion SPF 30') }}" method="get">
-        <button type="submit" class="view-btn">🔍 View Product</button>
-      </form>
-    </div>
+    {% endfor %}
 
-      <div class="product-card">
-        <img src="{{ url_for('static', filename='images/cerave.jpeg') }}" alt="Cerave Moisturizing Cream">
-        <h3>Cerave Moisturizing Cream</h3>
-      </div>
-    
-      <div class="product-card">
-        <img src="{{ url_for('static', filename='images/ceravedailysunscreen.jpeg') }}" alt="Cerave Facial Moisturizing Lotion SPF 30">
-        <h3>Cerave Facial Moisturizing Lotion SPF 30</h3>
-      </div>
-    </div>
 </div>
 </div>
 

@@ -1,145 +1,61 @@
 {% extends "base.html" %}
+
+{% block title %}Diary{% endblock %}
+
+
+
 {% block content %}
-
 <!-- Back to Home Floating Button -->
-<a href="{{ url_for('homepage') }}" class="corner-back-btn">← Back to Home</a>
+<a href="/homepage" class="corner-back-btn">← Back to Home</a>
 
+<div>
 
-<div class="diary-page">
-    <h1 class="diary-title">🧴 Skincare Diary</h1>
+    <a href="/diary/add" class="btn btn-primary mt-4">➕ Add a New Diary Entry</a>
 
-        <form>
-          <fieldset>
-            <legend>Daily Entry</legend>
-      
-            <label for="date">Date:</label>
-            <input type="date" name="date" id="date" required><br>
-      
-            <label for="time">Time:</label>
-            <input type="time" name="time" id="time" required><br>
-      
-            <label>Products Used:</label><br>
-            <input type="checkbox" id="product1" name="products" value="product1">
-            <label for="product1">Cleanser</label><br>
-      
-            <input type="checkbox" id="product2" name="products" value="product2">
-            <label for="product2">Moisturizer</label><br>
-      
-            <label for="acne">Any new acne or breakouts?</label>
-            <select name="acne" id="acne">
-              <option value="0">No</option>
-              <option value="1">Yes</option>
-            </select><br>
-      
-            <label for="notes">Notes:</label><br>
-            <textarea name="notes" id="notes" rows="5" placeholder="Describe how your skin is doing today."></textarea><br>
-      
-            <label for="shared">Share with others?</label>
-            <select name="shared" id="shared">
-              <option value="0">No</option>
-              <option value="1">Yes</option>
-            </select><br><br>
-      
-            <button type="submit" class="submit-btn">💾 Save Entry</button>
-            
-          </fieldset>
-        </form>
 </div>
-  
 
+<div class="container mt-5">
+    <h2 class="mb-4">Your Diary Entries</h2>
 
-<style>
-    .diary-form-wrapper {
-        max-height: 500px;
-        overflow-y: auto;
-        border-radius: 20px;
-        border: 2px solid #a3143d;
-        background: #f2dae2;
-        padding: 40px;
-    }
-    
-    .form-card {
-        background-color: #fff0f5;
-        border-radius: 12px;
-        padding: 30px;
-        border: 2px solid #ffc1d3;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    
-    .form-card h2 {
-        font-family: 'Dancing Script', cursive;
-        color: #e91e63;
-        font-size: 28px;
-        margin-bottom: 25px;
-        text-align: center;
-    }
-    
-    .form-group {
-        margin-bottom: 20px;
-    }
-    
-    .form-group label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 6px;
-        color: #555;
-    }
-    
-    .form-group input,
-    .form-group textarea {
-        width: 100%;
-        padding: 12px 14px;
-        border: 1px solid #ffc1d3;
-        border-radius: 8px;
-        background-color: #fff;
-        font-size: 14px;
-        font-family: 'Arial', sans-serif;
-        box-sizing: border-box;
-        resize: vertical;
-    }
-    
-    .submit-btn {
-        display: block;
-        width: 100%;
-        background-color: #f06292;
-        color: white;
-        font-weight: bold;
-        padding: 12px;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.2s ease-in-out;
-    }
+    {% if diary_entries %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Product</th>
+                <th>Body Part</th>
+                <th>Acne</th>
+                <th>Adverse Reaction</th>
+                <th>Notes</th>
+                <th>Photo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in diary_entries %}
+            <tr>
+                <td>{{ entry.date }}</td>
+                <td>{{ entry.product_name }}</td>
+                <td>{{ entry.body_part }}</td>
+                <td>{{ 'Yes' if entry.acne else 'No' }}</td>
+                <td>{{ 'Yes' if entry.adverse else 'No' }}</td>
+                <td>{{ entry.diary_note }}</td>
+                <td>
+                    {% if entry.photo %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ entry.photo) }}" class="img-fluid"
+                        alt="Diary photo" style="max-height: 100px;">
+                    {% else %}
+                    No Photo
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
+    {% else %}
+    <p>You haven't added any diary entries yet.</p>
+    {% endif %}
 
-    .corner-back-btn {
-        position: fixed;
-        top: 100px;
-        left: 20px;
-        background-color: #ffc1d3;
-        color: white;
-        font-weight: bold;
-        padding: 10px 18px;
-        border-radius: 10px;
-        text-align: center;
-        text-decoration: none;
-        font-size: 14px;
-        z-index: 999;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        transition: background 0.2s ease-in-out;
-}
-
-.corner-back-btn:hover {
-    background-color: #f06292;
-}
-    
-.submit-btn:hover {
-    background-color: #e95184;
-}
-textarea {
-    width: 100%;
-    box-sizing: border-box;
-}
-    </style>
+    <a href="diary/add" class="btn btn-primary mt-4">➕ Add Diary Entry</a>
+</div>
 {% endblock %}
