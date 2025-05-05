@@ -6,17 +6,16 @@
 
         <!-- Profile Image Upload & Edit Icon -->
         <div class="profile-picture-frame">
-            <!-- Profile Picture Upload Form -->
-            <form method="POST" action="user/upload_profile_picture" enctype="multipart/form-data">
+            <form method="POST" action="{{ url_for('user.upload_profile_picture') }}" enctype="multipart/form-data">
                 <label for="profile-picture-upload">
-                    <img src="{{ url_for('static', filename='images/' + user.picture) }}" alt="Profile Picture" class="profile-pic">
+                    <img src="{{ url_for('static', filename='images/' + (user.picture or 'skincare-user-icon.png')) }}" alt="Profile Picture" class="profile-pic">
                     <span class="upload-hover-text">Change Photo</span>
                 </label>
                 <input type="file" id="profile-picture-upload" name="profile_picture" style="display: none;" onchange="this.form.submit()">
             </form>
 
             <!-- ✎ icon takes you to edit profile -->
-            <div class="edit-icon" onclick="location.href='user/edit_profile'">✎</div>
+            <div class="edit-icon" onclick="location.href='{{ url_for('user.edit_profile') }}'">✎</div>
         </div>
 
         <!-- Username -->
@@ -24,7 +23,6 @@
 
         <!-- Skin Type -->
         <div class="skin-type-display">
-            <img src="{{ url_for('static', filename='images/skincare-user-icon.png') }}" alt="Skin Icon" class="skin-icon">
             <span class="skin-label">{{ user.skintype }} Skin</span>
         </div>
 
@@ -37,6 +35,7 @@
     </div>
 </div>
 {% endblock %}
+
 
 
 

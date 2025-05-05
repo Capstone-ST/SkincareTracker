@@ -7,10 +7,10 @@
 
         <!-- Profile Picture Preview -->
         <div class="edit-picture-frame">
-            <img src="{{ url_for('static', filename='images/' + user.picture) }}" alt="Current Profile" class="edit-profile-pic">
+            <img src="{{ url_for('static', filename='images/' + (user.picture or 'skincare-user-icon.png')) }}" alt="Current Profile" class="edit-profile-pic">
         </div>
 
-        <form method="POST" enctype="multipart/form-data" class="edit-form">
+        <form action="{{ url_for('user.edit_profile') }}" method="POST" enctype="multipart/form-data" class="edit-form">
             <label>Email:</label>
             <input type="text" name="email" value="{{ user.email }}" required>
 
@@ -28,5 +28,6 @@
     </div>
 </div>
 {% endblock %}
+
 
 
