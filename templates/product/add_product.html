@@ -4,11 +4,15 @@
     <div class="form-card">
         <h2>{{ editing_id and "Edit Product" or "Add New Product" }}</h2>
 
-        <form method="POST">
-            <div class="form-group">
-                <label for="name">Product Name:</label>
-                <input type="text" name="name" id="name" value="{{ product.name if product else '' }}" required>
-            </div>
+        <form method="POST" action="{{ url_for('product.add_product') }}">
+    {% if editing_id %}
+        <input type="hidden" name="product_id" value="{{ editing_id }}">
+    {% endif %}
+
+    <div class="form-group">
+        <label for="name">Product Name:</label>
+        <input type="text" name="name" id="name" value="{{ product.name if product else '' }}" required>
+    </div>
 
             <div class="form-group">
                 <label for="type">Type:</label>
@@ -41,7 +45,7 @@
 </div>
 
 <!--  Floating Back to Home Button -->
-<a href="{{ url_for('homepage') }}" class="floating-back-card">
+<a href="{{ url_for('home.view_home') }}" class="floating-back-card">
     ←<br><strong>Back<br>to<br>Home</strong>
 </a>
 

@@ -1,23 +1,136 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <!-- Back to Home Floating Button -->
-<a href="/homepage" class="corner-back-btn">← Back to Home</a>
+<a href="{{ url_for('home.view_home') }}" class="corner-back-btn">← Back to Home</a>
 
 <!-- Page Title -->
-<div style="text-align: center;">
-<h1 class="page-title">🧴 All Products</h1><br>
-<div class="product-scroll-wrapper">
-<div class="product-grid">
-    {% for product in products_list %}
-    <div class="product-card">
-      <h3>{{ product.product_name }}</h3>
-      <h3>{{ product.amazon_link}}</h3>
-      <h3>{{ product.ingredients }}</h3>
-    </div>
-    {% endfor %}
+<div class="all-products-container">
+    <h1 class="page-title">🧴 All Products</h1>
 
+    <div class="product-scroll-wrapper">
+        <div class="product-grid">
+            {% for product in products_list %}
+            <div class="product-card">
+                <h3 class="product-name">{{ product.product_name }}</h3>
+                <p class="product-link"><a href="{{ product.amazon_link }}" target="_blank">🛒 View on Amazon</a></p>
+                <div class="product-ingredients">
+                    <h4>Ingredients:</h4>
+                    <p>{{ product.ingredients }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
-</div>
+
+<!-- Styling -->
+<style>
+.all-products-container {
+    padding: 30px;
+    background: #ffe4ec;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+.page-title {
+    font-family: 'Dancing Script', cursive;
+    color: #e91e63;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.product-scroll-wrapper {
+    overflow-x: auto;
+    padding-bottom: 20px;
+}
+
+.product-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.product-card {
+    flex: 0 0 300px;
+    background-color: #fff0f8;
+    border: 2px solid #ffc1d3;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: scale(1.03);
+}
+
+.product-name {
+    font-size: 20px;
+    color: #d81b60;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-link a {
+    font-size: 14px;
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.product-link a:hover {
+    text-decoration: underline;
+}
+
+.product-ingredients h4 {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.product-ingredients p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+    max-height: 150px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+/* Scrollbar Styling */
+.product-ingredients p::-webkit-scrollbar {
+    width: 6px;
+}
+.product-ingredients p::-webkit-scrollbar-thumb {
+    background-color: #e91e63;
+    border-radius: 3px;
+}
+
+.corner-back-btn {
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    background-color: #ffc1d3;
+    color: white;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: background 0.2s ease-in-out;
+}
+
+.corner-back-btn:hover {
+    background-color: #f06292;
+}
+</style>
 
 {% endblock %}
+
