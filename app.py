@@ -182,6 +182,12 @@ def diary():
         return redirect('/login')
     return render_template('diary.html')
 
+@app.route('/diary_log')
+def diary_log():
+    if 'user_id' not in session:
+        return redirect('/login')
+    return render_template('diary_log.html')
+
 
 @app.route('/all_products')
 def all_products():

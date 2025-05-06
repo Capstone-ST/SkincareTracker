@@ -44,19 +44,26 @@
             
           </fieldset>
         </form>
+        <br>
+        <br>
+        <form action="{{ url_for('diary_log')}}" method="get">
+            <button type="submit" class="submit-btn">View Previous Diaries</button>
+        </form>
+         </form>
 </div>
   
 
 
 <style>
-    .diary-form-wrapper {
-        max-height: 500px;
+    
+    /* .diary-form-wrapper {
+        max-height: none;
         overflow-y: auto;
         border-radius: 20px;
         border: 2px solid #a3143d;
         background: #f2dae2;
         padding: 40px;
-    }
+    } */
     
     .form-card {
         background-color: #fff0f5;

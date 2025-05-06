@@ -11,37 +11,39 @@
         <a href="{{ url_for('add_product') }}" class="sidebar-btn add-btn">＋</a>
 
         <nav class="sidebar-nav">
-            <a class="sidebar-link" href="{{ url_for('all_products') }}"><span class="icon">🧴🧴</span><br>All Products</a>
-            <a class="sidebar-link"><span class="icon">❤️</span><br>Product Collection</a>
-            <a class="sidebar-link" href="{{ url_for('products') }}"><span class="icon">🧴</span><br>Your Product Information</a>
+            <a class="sidebar-link" href="{{ url_for('all_products') }}"><span class="icon">🧴🔎</span><br>Browse Products</a>
+            <a class="sidebar-link"><span class="icon">❤️</span><br>Your Current Routine</a>
+            <a class="sidebar-link" href="{{ url_for('products') }}"><span class="icon">🧴🔬</span><br>Your Product Information</a>
             <a class="sidebar-link" href="{{ url_for('diary') }}"><span class="icon">📅</span><br>Diary</a>
             <a class="sidebar-link"><span class="icon">⏰</span><br>Reminders</a>
         </nav>
     </div>
 
-    <!-- Main content -->
-    <div class="homepage-content">
-        <h1 class="welcome-msg"> 🌸 ✨ Welcome back gorgeous! ✨ 🌸 </h1>
+<!-- Main content -->
+<div class="homepage-wrapper">
+  <div class="homepage-content">
+      <h1 class="welcome-msg"> 🌸 ✨ Welcome back gorgeous! ✨ 🌸 </h1>
 
-        <!-- Featured Product Carousel -->
-        <div class="carousel-container">
-            <h2 class="section-title">🌟 Featured Picks</h2>
-            <div class="carousel" id="carousel">
-                <!-- Slides will be inserted here -->
-            </div>
-            <button class="carousel-prev" onclick="prevSlide()">&#10094;</button>
-            <button class="carousel-next" onclick="nextSlide()">&#10095;</button>
-        </div>
+      <!-- Featured Product Carousel -->
+      <div class="carousel-container">
+          <h2 class="section-title">🌟 Featured Picks</h2>
+          <div class="carousel" id="carousel">
+              <!-- Slides will be inserted here -->
+          </div>
+          <button class="carousel-prev" onclick="prevSlide()">&#10094;</button>
+          <button class="carousel-next" onclick="nextSlide()">&#10095;</button>
+      </div>
 
-        <!-- Today's Log Snapshot -->
-        <div class="daily-log-card">
-            <h2>📝 Today’s Log</h2>
-            <p>Don’t forget to track your routine for glowing results!</p>
-            <a href="/diary" class="log-btn">Go to Diary</a>
-            <a href="#" class="log-btn">Set Reminders</a>
-        </div>
-    </div>
+      <!-- Today's Log Snapshot -->
+      <div class="daily-log-card">
+          <h2>📝 Today’s Log</h2>
+          <p>Don’t forget to track your routine for glowing results!</p>
+          <a href="/diary" class="log-btn">Go to Diary</a>
+          <a href="#" class="log-btn">Set Reminders</a>
+      </div>
+  </div>
 </div>
+
 
 <!-- Sidebar toggle -->
 <script>
@@ -99,26 +101,38 @@
 .homepage-content {
     padding: 30px;
     color: #444;
+    text-align: center;
+    max-width: 800px;
 }
 
+
+.homepage-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 60px;
+    width: 100%;
+}
 .welcome-msg {
     font-family: 'Dancing Script', cursive;
-    font-size: 32px;
+    font-size: 52px;
     color: #e91e63;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 
 .carousel-container {
-    margin-bottom: 40px;
+    margin-bottom: 50px;
     position: relative;
-    max-width: 300px; /* was 500px */
+    max-width: 500px; /* was 500px */
     margin-left: auto;
     margin-right: auto;
+    min-height: 360px
 }
 
 .carousel {
     width: 100%;
-    height: auto;
+    height: 300px;;
     overflow: hidden;
     border-radius: 12px;
     border: 2px solid #f8a8b7;
