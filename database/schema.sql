@@ -21,19 +21,18 @@ CREATE TABLE IF NOT EXISTS Products (
     directions TEXT,
     shelflife INTEGER,
     ingredients TEXT,
-    product_pic TEXT
-, user_id INTEGER REFERENCES Users(user_id)
+    product_pic TEXT, 
+    user_id INTEGER REFERENCES Users(user_id)
 );
 
--- Collections table (user_id + product_id should be unique together)
+-- Collections table 
 CREATE TABLE IF NOT EXISTS Collections (
     collection_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
     created_at DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (product_id) REFERENCES Products(product_id),
-    UNIQUE(user_id, product_id)
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 
 -- Diaries table with BOOLEAN fields and correct spelling
@@ -62,8 +61,7 @@ CREATE TABLE IF NOT EXISTS Reviews (
     review_photo TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (product_id) REFERENCES Products(product_id),
-    UNIQUE(user_id, product_id)
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 
 -- Reminders table 
@@ -107,17 +105,17 @@ INSERT INTO Products (product_id,product_name,type,amazon_link,directions,shelfl
  (11,'Cerave Moisturizing Cream','Moisturizer','https://www.amazon.com/CeraVe-Moisturizing-Moisturizer-Niacinamide-Comedogenic/dp/B0CTTDLQF3/ref=sr_1_10?...','Apply to face and body as needed.',18,'Water, Ceramides, Glycerin',NULL,NULL),
  (12,'Cerave Facial Moisturizing Lotion SPF 30','Sunscreen','https://www.amazon.com/CeraVe-Moisturizing-Cream-Daily-Moisturizer/dp/B00TTD9BRC/ref=sr_1_5?...','Apply 15 minutes before sun exposure.',12,'Water, Zinc Oxide, Ceramides',NULL,NULL),
  (13,'Niacinamide','Serum','https://www.amazon.com/dp/B079DFPZPJ','Apply morning and night',12,'Niacinamide, Zinc PCA, Water',NULL,NULL),
- (14,'Salicylic Acid','Cleanser','https://www.amazon.com/dp/B00LW2GM84','Use in evening',9,'Salicylic Acid, Glycerin, Water',NULL,NULL),
+ (14,'Salicylic Acid','Cleanser','https://www.amazon.com/dp/B00LW2GM84','Use in evening',9,'Salicylic Acid, Glycerin, Water',NULL,NULL);
 
 
 -- Insert sample collections
 INSERT INTO Collections (user_id, product_id, created_at) VALUES
 (1, 1, '2024-11-01 10:00:00'),
 (1, 2, '2024-11-02 10:05:00'),
-(2, 3, '2025-01-05 11:00:00'),
-(3, 2, '2025-02-12 08:15:00'),
-(4, 5, '2025-03-22 13:25:00'),
-(5, 4, '2025-04-02 09:35:00');
+(1, 3, '2025-01-05 11:00:00'),
+(1, 2, '2025-02-12 08:15:00'),
+(1, 5, '2025-03-22 13:25:00'),
+(1, 4, '2025-04-02 09:35:00');
 
 -- Insert sample diary entries
 INSERT INTO Diaries (user_id, date, product_id, body_part, acne, adverse, diary_note, diary_photo) VALUES
@@ -138,11 +136,11 @@ INSERT INTO Reviews (user_id, product_id, stars, review_note, repurchase, review
 
 -- Insert sample reminders
 INSERT INTO Reminders (reminder_type, alarm_date, recurrence, user_id, product_id) VALUES
-('Morning Routine', '2025-04-21 08:00:00', 1, 1, 1),
-('Night Serum', '2025-04-21 21:00:00', 1, 2, 3),
-('Sunscreen', '2025-04-21 13:00:00', 1, 3, 2),
-('Exfoliation', '2025-04-22 20:00:00', 7, 4, 5),
-('Moisturize Neck', '2025-04-21 09:00:00', 0.5, 5, 4);
+('Morning Routine', '2025-05-08 08:00:00', 1, 1, 1),
+('Night Serum', '2025-05-21 21:00:00', 1, 1, 3),
+('Sunscreen', '2025-05-12 13:00:00', 1, 1, 2),
+('Exfoliation', '2025-05-13 20:00:00', 7, 1, 5),
+('Moisturize Neck', '2025-05-09 09:00:00', 0.5, 1, 4);
 
 
 -- Enable foreign key checks and commit the transaction

@@ -1,0 +1,20 @@
+<div class="upcoming">
+    {% if upcoming %}
+    🔔 Next Reminder:
+    <strong>{{ upcoming.reminder_type }}</strong>
+    {% if upcoming.product_name %} for <strong>{{ upcoming.product_name }}</strong>{% endif %}
+    at <strong>{{ upcoming.alarm_date }}</strong>
+    {% else %}
+    ✅ No upcoming reminders!
+    {% endif %}
+</div>
+
+<style>
+
+.upcoming {
+    background-color:white;
+    border: solid red;
+    padding: 5px;
+}
+
+</style>

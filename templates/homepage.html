@@ -11,7 +11,7 @@
         <a href="/add_product" class="sidebar-btn add-btn">＋</a>
 
         <nav class="sidebar-nav">
-            <a class="sidebar-link" href="/reminders"><span class="icon">⏰</span><br>Reminders</a>
+            <a class="sidebar-link" href="/reminder"><span class="icon">⏰</span><br>Reminders</a>
             <a class="sidebar-link" href="/diary"><span class="icon">📅</span><br>My Diary</a>
             <a class="sidebar-link" href="{{ url_for('collection.my_collection') }}"><span class="icon">🧴</span><br>My Collection</a>
             <a class="sidebar-link" href="{{ url_for('product.view_all_product') }}"><span class="icon">🧴🧴</span><br>All Products</a>
@@ -23,6 +23,9 @@
     <!-- Main content -->
     <div class="homepage-content">
         <h1 class="welcome-msg"> 🌸 ✨ Welcome back gorgeous! ✨ 🌸 </h1>
+
+        <!-- Line of Reminder  -->
+        {% include '/upcoming.html' %}
 
         <!-- Featured Product Carousel -->
         <div class="carousel-container">
