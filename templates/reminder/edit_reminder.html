@@ -8,7 +8,7 @@
 
 
 <div class="container mt-5">
-    <h2>Add a New Reminder</h2>
+    <h2>Edit a Reminder</h2>
     <form action="/reminder/edit/{{data.reminder_id}}" method="POST">
         <div class="mb-3">
             <label for="reminder_type" class="form-label">Reminder Type:</label>
@@ -22,7 +22,7 @@
 
         <div class="mb-3">
             <label for="recurrence" class="form-label">Recurrence (days):</label>
-            <input type="number" class="form-control" id="recurrence" name="recurrence" value="{{data.recurrence}}" min="1" value="1.0" required>
+            <input type="number" class="form-control" id="recurrence" name="recurrence" value="{{data.recurrence}}"  value="1.0" required>
         </div>
 
         <div class="mb-3">

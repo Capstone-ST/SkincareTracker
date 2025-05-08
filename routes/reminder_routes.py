@@ -52,7 +52,7 @@ def add_reminder():
         )
         db.commit()
         db.close()
-        return redirect("reminder/")
+        return redirect("/reminder")
 
     db.close()
     return render_template("add_reminder.html", products=products)
@@ -76,21 +76,20 @@ def get_next_upcoming_reminder():
     db.close()
     return render_template("upcoming.html", upcoming=upcoming)
 
+@reminder_bp.route("reminder/delete/<int:id>")
 @reminder_bp.route("/delete/<int:id>", methods=["POST"])
 def delete_product(id):
-    if "user_id" not in session:
-        return redirect("/user/login")
+
     db = __import__("app").app.get_db_connection()
-    # Delete from Collections first
     db.execute(
         """
         DELETE FROM Reminders WHERE reminder_id = ?
         """,
-        (id),
+        (id,)
     )
     db.commit()
     db.close()
-    return redirect(url_for("/reminder"))
+    return redirect("/reminder")
 
 @reminder_bp.route("/reminder/edit/<int:id>")
 @reminder_bp.route("/edit/<int:id>", methods=["GET", "POST"])
@@ -106,9 +105,11 @@ def edit_reminder(id):
         product_id = request.form.get("product_id", None)
 
         db.execute(
-            """UPDATE Reminders (reminder_type, alarm_date, recurrence, reminder_note, product_id)
-               VALUES (?, ?, ?, ?, ?)
-               WHERE reminder_id = ? ;""",
+            """
+            UPDATE Reminders
+            SET reminder_type = ?, alarm_date = ?, recurrence = ?, reminder_note = ?, product_id = ?
+            WHERE reminder_id = ?
+               """,
             (
                 reminder_type,
                 alarm_date,
@@ -120,7 +121,7 @@ def edit_reminder(id):
         )
         db.commit()
         db.close()
-        return redirect("reminder/")
+        return redirect("/reminder")
     
     data = db.execute("SELECT * FROM Reminders WHERE reminder_id=?", (id,)).fetchone()
 
