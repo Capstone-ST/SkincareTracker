@@ -25,7 +25,10 @@
         <h1 class="welcome-msg"> 🌸 ✨ Welcome back gorgeous! ✨ 🌸 </h1>
 
         <!-- Line of Reminder  -->
-        {% include '/upcoming.html' %}
+         <div onclick="window.location.href = '/reminder';">
+            {% include '/upcoming.html' %}
+         </div>
+        
 
         <!-- Featured Product Carousel -->
         <div class="carousel-container">
@@ -42,7 +45,7 @@
             <h2>📝 Today’s Log</h2>
             <p>Don’t forget to track your routine for glowing results!</p>
             <a href="/diary" class="log-btn">Go to Diary</a>
-            <a href="#" class="log-btn">Set Reminders</a>
+            <a href="/reminder/add" class="log-btn">Set Reminders</a>
         </div>
     </div>
 </div>

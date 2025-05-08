@@ -6,12 +6,13 @@
 <a href="/homepage" class="corner-back-btn">← Back to Home</a>
 
 
-<div class="container mt-5 reminders-page">
-    <h2 class="mb-4 reminders-title">Your Reminders</h2>
+<div class="reminders-page">
+    <h1 class="reminders-title">Your Reminders</h1>
 
     <a href="reminder/add" class="btn btn-primary mt-4">➕ Add New Reminder</a>
+    <div><p> </p></div>
 
-    <div class="reminder-table-wrapper">
+    <div class="reminder-table-wrapper mt-4">
         <div class="reminder-table">
             <table>
                 <thead>
@@ -21,6 +22,7 @@
                         <th>Recurrence</th>
                         <th>Deadline</th>
                         <th>Note</th>
+                        <th>Actions</th>
                         <!-- <th>Status</th> -->
                     </tr>
                 </thead>
@@ -34,7 +36,13 @@
                         <td> {{ r.recurrence }} days</td>
                         <td>{{ r.alarm_date }}</td>
                         <td>{{ r.reminder_note }}</td>
-                        <!-- <td>{{ 'Completed' if r.completed else 'Pending' }}</td> -->
+                        <td>
+                            <a href="reminder/edit/{{ r.reminder_id }}">✎ Edit</a> |
+                            <form method="POST" action="reminder/delete/{{ r.reminder_id }}" style="display:inline;"
+                                onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                <button type="submit" class="delete-btn">🗑️ Delete</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
 
