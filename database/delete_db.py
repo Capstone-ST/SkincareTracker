@@ -31,7 +31,11 @@ def delete_db(database_file="skincare.db"):
         conn.commit()
     if conn:
         conn.close()
+        print("successfully dropped all tables")
+    else:
+        print("uhhhh tables didnt get dropped......")
+    
 
 
 if __name__ == "__main__":
-    delete_db(database_file="skincare.db")
+    delete_db(database_file="./skincare.db")

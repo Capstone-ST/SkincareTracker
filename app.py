@@ -7,8 +7,7 @@ from routes.user_routes import user_bp
 from routes.product_routes import product_bp
 from routes.review_routes import review_bp
 from routes.collection_routes import collection_bp
-
-# from routes.reminder_routes import reminder_bp
+from routes.reminder_routes import reminder_bp
 
 
 import os
@@ -27,7 +26,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 # Register Blueprints
 app.register_blueprint(diary_bp, url_prefix="/diary")
-# app.register_blueprint(reminder_bp, url_prefix="/reminders")
+app.register_blueprint(reminder_bp, url_prefix="/reminder")
 app.register_blueprint(user_bp, url_prefix="/user")  
 app.register_blueprint(product_bp)
 app.register_blueprint( review_bp, url_prefix="/review")  

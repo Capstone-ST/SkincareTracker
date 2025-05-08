@@ -3,34 +3,135 @@
 
 {% block content %}
 <!-- Back to Home Floating Button -->
-<a href="{{ url_for('homepage') }}" class="corner-back-btn">← Back to Home</a>
+<a href="/homepage" class="corner-back-btn">← Back to Home</a>
 
 
-<div class="container mt-5">
-    <h2 class="mb-4">Your Reminders</h2>
+<div class="container mt-5 reminders-page">
+    <h2 class="mb-4 reminders-title">Your Reminders</h2>
 
-    <a href="{{ url_for('add_reminder') }}" class="btn btn-primary mt-4">➕ Add New Reminder</a>
+    <a href="reminder/add" class="btn btn-primary mt-4">➕ Add New Reminder</a>
+
+    <div class="reminder-table-wrapper">
+        <div class="reminder-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Reminder</th>
+                        <th>Product</th>
+                        <th>Recurrence</th>
+                        <th>Deadline</th>
+                        <th>Note</th>
+                        <!-- <th>Status</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% if reminders %}
+                    {% for r in reminders %}
+                    <tr class="reminder {% if r.completed %}completed{% endif %}">
+                        <td>{{ r.reminder_type|capitalize }} </td>
+                        <td>{{ r.product_name }}</td>
+                        <td> {{ r.recurrence }} days</td>
+                        <td>{{ r.alarm_date }}</td>
+                        <td>{{ r.reminder_note }}</td>
+                        <!-- <td>{{ 'Completed' if r.completed else 'Pending' }}</td> -->
+                    </tr>
+                    {% endfor %}
+
+                    {% else %}
+                    <p>No reminders found.</p>
+                    {% endif %}
+                
+                </tbody>
+
+                    <!-- <button>
+                        <a href="reminder/add" class="btn btn-primary mt-4">Add New Reminder</a>
+                    </button> -->
 
 
-    {% if reminders %}
-    <ul class="list-group">
-        {% for reminder in reminders %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <strong>{{ reminder.reminder_type }}</strong><br>
-                <small>Alarm: {{ reminder.alarm_date }}</small><br>
-                <small>Repeats every {{ reminder.recurrence }} days</small>
-            </div>
-            {% if reminder.product_name %}
-            <span class="badge bg-info text-dark">{{ reminder.product_name }}</span>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>You have no reminders set.</p>
-    {% endif %}
-
-    <a href="{{ url_for('add_reminder') }}" class="btn btn-primary mt-4">Add New Reminder</a>
+            </table>
+        </div>
+    </div>
 </div>
+
+
+
+<!-- Styling -->
+<style>
+    .reminders-page {
+        padding: 30px;
+    }
+
+    .reminders-title {
+        text-align: center;
+        font-family: 'Dancing Script', cursive;
+        color: #e91e63;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .reminder-table-wrapper {
+        max-height: 500px;
+        overflow-y: auto;
+        border-radius: 10px;
+        border: 2px solid #ffc1d3;
+        background: #fff0f5;
+        padding: 20px;
+    }
+
+    .reminder-table table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+    }
+
+    .reminder-table th,
+    .reminder-table td {
+        border-bottom: 1px solid #ffc1d3;
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .reminder-table th {
+        background-color: #ffc1d3;
+        color: white;
+        font-weight: 600;
+    }
+
+    .reminder-table td a {
+        color: #e91e63;
+        text-decoration: none;
+    }
+
+    .reminder-table .delete-btn {
+        background: none;
+        color: #e91e63;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .corner-back-btn {
+        position: fixed;
+        top: 100px;
+        left: 20px;
+        background-color: #ffc1d3;
+        color: white;
+        font-weight: bold;
+        padding: 10px 18px;
+        border-radius: 10px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 14px;
+        z-index: 999;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background 0.2s ease-in-out;
+    }
+
+    .corner-back-btn:hover {
+        background-color: #f06292;
+    }
+</style>
 {% endblock %}
