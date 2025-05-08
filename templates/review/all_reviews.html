@@ -1,23 +1,81 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Back to Home Floating Button -->
 <a href="/homepage" class="corner-back-btn">← Back to Home</a>
 
-<!-- Page Title -->
-<div style="text-align: center;">
-<h1 class="page-title">🧴 All Reviews</h1><br>
-<div class="review-scroll-wrapper">
-  <div class="review-grid">
+<div>
+  <div style="text-align: center;">
+    <h1 class="page-title">🧴 All Reviews & Shared Diaries</h1><br>
+  </div>
+
+  <div class="review-scroll-wrapper">
+    <div class="review-grid">
+      
       {% for review in reviews_list %}
       <div class="review-card">
-        <h3>{{ review.review_name }}</h3>
-        <h3>{{ review.review_note}}</h3>
-        <h3>{{ review.review_photo }}</h3>
+        <h4 style="color: gray;">Review</h4>
+        <h3>{{ review.product_name }}</h3>
+        <p>{{ review.review_note }}</p>
+        {% if review.review_photo %}
+          <img src="{{ url_for('static', filename='uploads/' ~ review.review_photo) }}"
+               alt="Review photo"
+               class="review-photo">
+        {% else %}
+          <p>No photo</p>
+        {% endif %}
       </div>
       {% endfor %}
 
+      {% for entry in shared_diaries %}
+      <div class="review-card">
+        <h4 style="color: gray;">Diary</h4>
+        <h3>{{ entry.product_name }}</h3>
+        <p>{{ entry.diary_note }}</p>
+        {% if entry.diary_photo %}
+          <img src="{{ url_for('static', filename='uploads/' ~ entry.diary_photo) }}"
+               alt="Diary photo"
+               class="review-photo">
+        {% else %}
+          <p>No photo</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+    </div>
   </div>
 </div>
 
+
+<style>
+.review-scroll-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.review-card {
+  background: #fff0f5;
+  border: 2px solid #ffc1d3;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.review-photo {
+  max-height: 150px;
+  width: auto;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+</style>
 {% endblock %}

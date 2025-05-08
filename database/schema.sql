@@ -35,17 +35,17 @@ CREATE TABLE IF NOT EXISTS Collections (
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 
--- Diaries table with BOOLEAN fields and correct spelling
+-- Diaries table  
 CREATE TABLE IF NOT EXISTS Diaries (
     diary_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     date TIMESTAMP,
     product_id INTEGER,
-    body_part TEXT,
-    acne BOOLEAN,          
-    adverse BOOLEAN,        
+    acne BOOLEAN,
+    adverse BOOLEAN,
     diary_note TEXT,
     diary_photo TEXT,
+    shared BOOLEAN,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
@@ -77,13 +77,11 @@ CREATE TABLE IF NOT EXISTS Reminders (
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
 
--- Insert data into Users table
+-- Insert sample users
 INSERT INTO Users (username, password, email, age, skintype, profile_pic) VALUES
 ('raisa', 'password123', 'raisa@gmail.com', 24, 'Oily', 'flower-corner.PNG'),
 ('admin', '123', 'admin@gmail.com', 23, 'Dry', 'default.png'),
-('epicsaif', '123', 'epicsaif@gmail.com', 23, 'Dry', 'default.png');
-
-INSERT INTO Users (username, password, email, age, skintype, profile_pic) VALUES
+('epicsaif', '123', 'epicsaif@gmail.com', 23, 'Dry', 'default.png'),
 ('skincareQueen', 'pass1234', 'queen@example.com', 25, 'oily', 'pic1.jpg'),
 ('glowGetter', 'glowUp2023', 'glow@example.com', 31, 'dry', 'pic2.jpg'),
 ('acneWarrior', 'securePass!', 'acne_w@example.com', 20, 'combination', 'pic3.jpg'),
@@ -118,12 +116,12 @@ INSERT INTO Collections (user_id, product_id, created_at) VALUES
 (1, 4, '2025-04-02 09:35:00');
 
 -- Insert sample diary entries
-INSERT INTO Diaries (user_id, date, product_id, body_part, acne, adverse, diary_note, diary_photo) VALUES
-(1, '2025-04-20 09:00:00', 1, 'face', 2, 0, 'Skin feels smooth after wash.', 'diary1.jpg'),
-(1, '2025-04-19 08:30:00', 3, 'forehead', 1, 0, 'Noticed less redness today.', 'diary2.jpg'),
-(1, '2025-04-18 21:00:00', 2, 'cheeks', 4, 1, 'Feels greasy, slight breakout.', 'diary3.jpg'),
-(1, '2025-04-20 07:45:00', 5, 'chin', 3, 0, 'Tingling sensation but tolerable.', 'diary4.jpg'),
-(1, '2025-04-19 22:00:00', 4, 'neck', 0, 0, 'Soothing, no irritation.', 'diary5.jpg');
+INSERT INTO Diaries (user_id, date, product_id, acne, adverse, diary_note, diary_photo, shared) VALUES
+(1, '2025-04-20 09:00:00', 1, 1, 0, 'Skin feels smooth after wash.', 'diary1.jpg', 0),
+(1, '2025-04-19 08:30:00', 3, 1, 0, 'Noticed less redness today.', 'diary2.jpg', 1),
+(1, '2025-04-18 21:00:00', 2, 1, 1, 'Feels greasy, slight breakout.', 'diary3.jpg', 1),
+(1, '2025-04-20 07:45:00', 5, 1, 0, 'Tingling sensation but tolerable.', 'diary4.jpg', 1),
+(1, '2025-04-19 22:00:00', 4, 0, 0, 'Soothing, no irritation.', 'diary5.jpg', 0);
 
 -- Insert sample reviews
 INSERT INTO Reviews (user_id, product_id, stars, review_note, repurchase, review_photo) VALUES

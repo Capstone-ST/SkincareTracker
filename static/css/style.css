@@ -694,6 +694,25 @@ body {
     background-color: #f06292;
 }
 
+.btn.btn-primary.mb-4 {
+    background-color: #ffc1d3;
+    color: white;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease-in-out;
+}
+
+.btn.btn-primary.mb-4:hover {
+    background-color: #f06292;
+}
+
+
 .product-scroll-wrapper {
     max-height: 600px;
     overflow-y: auto;
