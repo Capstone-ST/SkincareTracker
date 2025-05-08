@@ -16,13 +16,15 @@ def view_all_product():
     db = __import__("app").app.get_db_connection()
 
     # Show all products from all users
-    products = db.execute(
-        """
-        SELECT product_name, amazon_link, ingredients
+    products = db.execute("""
+        SELECT
+          product_id AS id,
+          product_name,
+          amazon_link,
+          ingredients
         FROM Products
         ORDER BY product_id
-        """
-    ).fetchall()
+    """).fetchall()
 
     db.close()
     return render_template("product/all_products.html", products_list=products)
@@ -199,8 +201,74 @@ def delete_product(id):
 
     return redirect(url_for("collection.my_collection"))
 
+@product_bp.route("/product/<int:product_id>", methods=["GET"])
+def view_product(product_id):
+    if "user_id" not in session:
+        return redirect("/user/login")
 
+    user_id = session["user_id"]
+    db = __import__("app").app.get_db_connection()
 
+    # Get product info
+    product = db.execute(
+        """
+        SELECT
+          product_id,
+          product_name,
+          type,
+          amazon_link,
+          directions,
+          shelflife,
+          ingredients,
+          product_pic
+        FROM Products
+        WHERE product_id = ?
+        """,
+        (product_id,)
+    ).fetchone()
 
+    if product is None:
+        db.close()
+        abort(404)
 
+    # Get product reviews
+    reviews = db.execute(
+        """
+        SELECT review_note, review_photo
+        FROM Reviews
+        WHERE product_id = ?
+        """,
+        (product_id,)
+    ).fetchall()
+
+    # Get shared diary entries
+    shared_diaries = db.execute(
+        """
+        SELECT diary_note, diary_photo
+        FROM Diaries
+        WHERE product_id = ? AND shared = 1
+        """,
+        (product_id,)
+    ).fetchall()
+
+    # Check if user already submitted review for product
+    user_has_reviewed = db.execute(
+        """
+        SELECT 1
+        FROM Reviews
+        WHERE user_id = ? AND product_id = ?
+        LIMIT 1
+        """,
+        (user_id, product_id)
+    ).fetchone() is not None
+
+    db.close()
+
+    return render_template(
+        "product/product_info.html",
+        product=product,
+        product_reviews=reviews,
+        shared_diaries=shared_diaries,
+        user_has_reviewed=user_has_reviewed
+    )
 

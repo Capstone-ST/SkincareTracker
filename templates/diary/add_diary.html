@@ -8,7 +8,7 @@
 <div class="diary-page">
     <h1 class="diary-title">🧴 Skincare Diary</h1>
 
-        <form>
+        <form method="POST" action="{{ url_for('diary.add_diary') }}">
           <fieldset>
             <legend>Daily Entry</legend>
       
@@ -19,11 +19,12 @@
             <input type="time" name="time" id="time" required><br>
       
             <label>Products Used:</label><br>
-            <input type="checkbox" id="product1" name="products" value="product1">
-            <label for="product1">Cleanser</label><br>
-      
-            <input type="checkbox" id="product2" name="products" value="product2">
-            <label for="product2">Moisturizer</label><br>
+            <select name="product_id" id="product_id" required>
+                <option value="">-- Select a product --</option>
+                {% for p in products %}
+                    <option value="{{ p['product_id'] }}">{{ p['product_name'] }}</option>
+                {% endfor %}
+            </select><br>
       
             <label for="acne">Any new acne or breakouts?</label>
             <select name="acne" id="acne">

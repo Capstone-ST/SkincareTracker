@@ -9,7 +9,6 @@
 <body>
 
 {% if request.path == '/login' %}
-    <!--  Decorative corner flowers (login only) -->
     <img src="{{ url_for('static', filename='images/flower-corner.png') }}" class="corner-flower left" alt="Flower Corner">
     <img src="{{ url_for('static', filename='images/flower-corner.png') }}" class="corner-flower right" alt="Flower Corner">
 {% endif %}
@@ -27,11 +26,11 @@
             <a href="/homepage">Homepage</a>
             <a href="/user/profile">Profile</a>
             <a href="/user/edit_profile">Edit Profile</a>
-            <a href="/user/logout">Logout</a>            
+            <a href="/user/logout">Logout</a>
         </div>
-    </div> 
+    </div>
     {% endif %}
-</div> 
+</div>
 
 {% if request.path == '/login' or request.path == '/homepage' %}
 <div class="curve-divider"></div>
@@ -64,7 +63,8 @@
     {% block content %}{% endblock %}
 </div>
 
-<!--  Slideshow script -->
+<!-- Slideshow script on login -->
+{% if request.path == '/login' %}
 <script>
     let affirmations = document.querySelectorAll('.affirmation');
     let purposes = document.querySelectorAll('.purpose');
@@ -85,6 +85,7 @@
     setInterval(rotateAffirmations, 4000);
     setInterval(rotatePurposes, 5000);
 </script>
+{% endif %}
 
 <!--  Dropdown toggle -->
 <script>
@@ -105,9 +106,3 @@
 
 </body>
 </html>
-
-
-
-
-
-

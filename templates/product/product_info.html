@@ -1,78 +1,91 @@
 {% extends "base.html" %}
+
 {% block content %}
 
+<a href="{{ url_for('home.view_home') }}" class="corner-back-btn">
+    ← Back to Home
+</a>
 
-<a href="{{ url_for('all_products') }}" class="corner-back-btn">← Back to All Products</a>
+<div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; margin: 30px auto; max-width: 1200px; padding: 0 20px;">
 
+  <div style="flex: 2; min-width: 350px;">
+    {% if product.product_pic %}
+    <img src="{{ url_for('static', filename='images/' + product.product_pic) }}"
+         alt="{{ product.product_name }}"
+         style="max-width: 100%; border-radius: 12px; display: block; margin: 0 auto 20px;">
+    {% endif %}
 
-<div style="text-align: center; margin-top: 30px;">
-    <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product_name }}" style="max-width: 300px; border-radius: 12px; margin-bottom: 20px;">
-    <h1 style="margin-top: 0;">{{ product_name }}</h1>
-    <table class="product-details">
-        <tr>
-            <th>Product Name</th>
-            <td>{{ product_name }}</td>
-        </tr>
-        <tr>
-            <th>Type</th>
-            <td>{{ product.type }}</td>
-        </tr>
-        <tr>
-            <th>Amazon Link</th>
-            <td><a href="{{ product.amazon_link }}" target="_blank">Buy on Amazon</a></td>
-        </tr>
-        <tr>
-            <th>Directions</th>
-            <td>{{ product.directions }}</td>
-        </tr>
-        <tr>
-            <th>Shelf Life (months)</th>
-            <td>{{ product.shelf_life }}</td>
-        </tr>
-        <tr>
-            <th>Ingredients</th>
-            <td>{{ product.ingredients }}</td>
-        </tr>
+    <h1 style="text-align: center;">{{ product.product_name }}</h1>
+
+    <table class="product-details" style="width: 100%; border-collapse: collapse;">
+        <tr><th>Product Name</th><td>{{ product.product_name }}</td></tr>
+        <tr><th>Type</th><td>{{ product.type or 'N/A' }}</td></tr>
+        <tr><th>Amazon Link</th><td>{% if product.amazon_link %}<a href="{{ product.amazon_link }}" target="_blank">Buy on Amazon</a>{% else %}N/A{% endif %}</td></tr>
+        <tr><th>Directions</th><td>{{ product.directions or 'N/A' }}</td></tr>
+        <tr><th>Shelf Life (months)</th><td>{{ product.shelflife or 'N/A' }}</td></tr>
+        <tr><th>Ingredients</th><td>{{ product.ingredients or 'N/A' }}</td></tr>
     </table>
-    <form action="{{ url_for('write_review', product_name=product_name) }}" method="get">
+
+    {% if not user_has_reviewed %}
+    <form action="{{ url_for('review.add_review', product_id=product.product_id) }}" method="get">
         <button type="submit" class="review-btn">📝 Write a Review</button>
     </form>
+    {% else %}
+    <button class="review-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+         You've already reviewed this product
+    </button>
+    {% endif %}
+    
+  </div>
+
+  <div class="review-panel">
+    <div class="review-header">User Reviews</div>
+    <div class="review-grid">
+      {% for review in product_reviews %}
+      <div class="review-card">
+        <h3>{{ product.product_name }}</h3>
+        <p>{{ review.review_note }}</p>
+        {% if review.review_photo %}
+        <img src="{{ url_for('static', filename='uploads/' ~ review.review_photo) }}" alt="Review photo" class="review-photo">
+        {% else %}
+        <p>No photo</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      {% for entry in shared_diaries %}
+      <div class="review-card">
+        <h3>{{ product.product_name }}</h3>
+        <p>{{ entry.diary_note }}</p>
+        {% if entry.diary_photo %}
+        <img src="{{ url_for('static', filename='uploads/' ~ entry.diary_photo) }}" alt="Diary photo" class="review-photo">
+        {% else %}
+        <p>No photo</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
-
 <style>
-    .corner-back-btn {
-        position: fixed;
-        top: 100px;
-        left: 20px;
-        background-color: #ffc1d3;
-        color: white;
-        font-weight: bold;
-        padding: 10px 18px;
-        border-radius: 10px;
-        text-align: center;
-        text-decoration: none;
-        font-size: 14px;
-        z-index: 999;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        transition: background 0.2s ease-in-out;
+.corner-back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #ffc1d3;
+    color: white;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: background 0.2s ease-in-out;
 }
-
-
-    .corner-back-btn:hover {
-        background-color: #f06292;
-}
-
-
-.product-details {
-    width: 100%;
-    max-width: 700px;
-    margin: 30px auto;
-    border-collapse: collapse;
-    background-color: #fff0f5;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
+.corner-back-btn:hover {
+    background-color: #f06292;
 }
 
 .product-details th,
@@ -81,26 +94,74 @@
     border-bottom: 1px solid #ffc1d3;
     text-align: left;
 }
-
 .product-details th {
     background-color: #ffe4ec;
-    font-weight: bold;
     color: #5e0b1f;
+    width: 180px;
 }
+
 .review-btn {
-        display: block;
-        width: 100%;
-        background-color: #f06292;
-        color: white;
-        font-weight: bold;
-        padding: 12px;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.2s ease-in-out;
-    }
+    width: 100%;
+    background-color: #f06292;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+.review-btn:hover {
+    background-color: #e95184;
+}
+
+.review-panel {
+    flex: 1;
+    min-width: 280px;
+    max-height: 600px;
+    overflow-y: auto;
+    border-radius: 10px;
+    /* background-color: #fffafc; */
+    position: relative;
+}
+
+.review-header {
+    position: sticky;
+    top: 0;
+    background-color: #ffe6f0;
+    padding: 12px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #e91e63;
+    border-bottom: 2px solid #ffc1d3;
+    z-index: 1;
+}
+
+.review-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 16px;
+}
+
+.review-card {
+    background: #fff0f5;
+    border: 2px solid #ffc1d3;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.review-photo {
+    max-height: 150px;
+    width: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+}
 </style>
 
 {% endblock %}
-
