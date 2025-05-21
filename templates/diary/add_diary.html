@@ -1,52 +1,62 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- Back to Home Floating Button -->
+<!-- Back to Home Button -->
 <a href="/homepage" class="corner-back-btn">← Back to Home</a>
 
-
 <div class="diary-page">
-    <h1 class="diary-title">🧴 Skincare Diary</h1>
+    <h1 class="diary-title">🧴 {{ entry and "Edit" or "Add to" }} Skincare Diary</h1>
 
-        <form method="POST" action="{{ url_for('diary.add_diary') }}">
-          <fieldset>
-            <legend>Daily Entry</legend>
-      
-            <label for="date">Date:</label>
-            <input type="date" name="date" id="date" required><br>
-      
-            <label for="time">Time:</label>
-            <input type="time" name="time" id="time" required><br>
-      
-            <label>Products Used:</label><br>
-            <select name="product_id" id="product_id" required>
-                <option value="">-- Select a product --</option>
-                {% for p in products %}
-                    <option value="{{ p['product_id'] }}">{{ p['product_name'] }}</option>
-                {% endfor %}
-            </select><br>
-      
-            <label for="acne">Any new acne or breakouts?</label>
-            <select name="acne" id="acne">
-              <option value="0">No</option>
-              <option value="1">Yes</option>
-            </select><br>
-      
-            <label for="notes">Notes:</label><br>
-            <textarea name="notes" id="notes" rows="5" placeholder="Describe how your skin is doing today."></textarea><br>
-      
-            <label for="shared">Share with others?</label>
-            <select name="shared" id="shared">
-              <option value="0">No</option>
-              <option value="1">Yes</option>
-            </select><br><br>
-      
-            <button type="submit" class="submit-btn">💾 Save Entry</button>
-            
-          </fieldset>
-        </form>
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('diary.edit_diary', diary_id=entry.diary_id) if entry else url_for('diary.add_diary') }}">
+      <fieldset>
+        <legend>Daily Entry</legend>
+
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date" value="{{ entry.date if entry else '' }}" required><br>
+
+        <label for="time">Time:</label>
+        <input type="time" name="time" id="time" value="12:00"><br>
+
+        <label for="product_id">Products Used:</label><br>
+        <select name="product_id" id="product_id" required>
+            <option value="">-- Select a product --</option>
+            {% for p in products %}
+                {% set selected = 'selected' if entry and p.product_id == entry.product_id else '' %}
+                <option value="{{ p.product_id }}" {{ selected }}>{{ p.product_name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="acne">Any new acne or breakouts?</label>
+        <select name="acne" id="acne">
+          <option value="0" {% if entry and not entry.acne %}selected{% endif %}>No</option>
+          <option value="1" {% if entry and entry.acne %}selected{% endif %}>Yes</option>
+        </select><br>
+
+        <label for="notes">Notes:</label><br>
+        <textarea name="notes" id="notes" rows="5" placeholder="Describe how your skin is doing today.">{{ entry.diary_note if entry else '' }}</textarea><br>
+
+        <label for="shared">Share with others?</label>
+        <select name="shared" id="shared">
+          <option value="0" {% if entry and not entry.shared %}selected{% endif %}>No</option>
+          <option value="1" {% if entry and entry.shared %}selected{% endif %}>Yes</option>
+        </select><br><br>
+
+        {% if entry and entry.diary_photo %}
+          <p>Current Photo:</p>
+          <img src="{{ url_for('static', filename='uploads/' ~ entry.diary_photo) }}"
+               alt="Current Diary Photo" style="max-height: 100px;"><br><br>
+        {% endif %}
+
+        <!-- Upload Photo-->
+        <label for="diary_photo">Upload Photo:</label>
+        <input type="file" name="diary_photo" id="diary_photo" accept="image/*"><br><br>
+
+        <button type="submit" class="submit-btn">{{ entry and "💾 Update Entry" or "💾 Save Entry" }}</button>
+      </fieldset>
+    </form>
 </div>
-  
+
+
 
 
 <style>
@@ -58,7 +68,7 @@
         background: #f2dae2;
         padding: 40px;
     }
-    
+
     .form-card {
         background-color: #fff0f5;
         border-radius: 12px;
@@ -66,7 +76,7 @@
         border: 2px solid #ffc1d3;
         box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    
+
     .form-card h2 {
         font-family: 'Dancing Script', cursive;
         color: #e91e63;
@@ -74,18 +84,18 @@
         margin-bottom: 25px;
         text-align: center;
     }
-    
+
     .form-group {
         margin-bottom: 20px;
     }
-    
+
     .form-group label {
         display: block;
         font-weight: 600;
         margin-bottom: 6px;
         color: #555;
     }
-    
+
     .form-group input,
     .form-group textarea {
         width: 100%;
@@ -98,7 +108,7 @@
         box-sizing: border-box;
         resize: vertical;
     }
-    
+
     .submit-btn {
         display: block;
         width: 100%;
@@ -134,7 +144,7 @@
 .corner-back-btn:hover {
     background-color: #f06292;
 }
-    
+
 .submit-btn:hover {
     background-color: #e95184;
 }
