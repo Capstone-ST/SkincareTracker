@@ -3,7 +3,7 @@ import os
 import requests
 from flask import jsonify
 from werkzeug.utils import secure_filename
-
+from routes.product_ai import generate_product_description
 
 product_bp = Blueprint("product", __name__, url_prefix="", template_folder="../templates/product")
 
@@ -226,6 +226,10 @@ def view_product(product_id):
         """,
         (product_id,)
     ).fetchone()
+    
+    product = dict(product) 
+    directions = generate_product_description(product['product_name'])
+    product['directions'] = directions
 
     if product is None:
         db.close()
