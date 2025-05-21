@@ -134,11 +134,11 @@ INSERT INTO Reviews (user_id, product_id, stars, review_note, repurchase, review
 
 -- Insert sample reminders
 INSERT INTO Reminders (reminder_type, alarm_date, recurrence, user_id, product_id) VALUES
-('Morning Routine', '2025-05-08 08:00:00', 1, 1, 1),
-('Night Serum', '2025-05-21 21:00:00', 1, 1, 3),
-('Sunscreen', '2025-05-12 13:00:00', 1, 1, 2),
-('Exfoliation', '2025-05-13 20:00:00', 7, 1, 5),
-('Moisturize Neck', '2025-05-09 09:00:00', 0.5, 1, 4);
+('Morning Routine', '2025-05-28 08:00:00', 1, 1, 1),
+('Night Serum', '2025-06-01 21:00:00', 1, 1, 3),
+('Sunscreen', '2025-05-25 13:00:00', 1, 1, 2),
+('Exfoliation', '2025-06-03 20:00:00', 7, 1, 5),
+('Moisturize Neck', '2025-05-29 09:00:00', 0.5, 1, 4);
 
 
 -- Enable foreign key checks and commit the transaction

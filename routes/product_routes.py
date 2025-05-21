@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 import os
 import requests
+from datetime import datetime, timedelta
 from flask import jsonify
 from werkzeug.utils import secure_filename
 
@@ -146,6 +147,19 @@ def add_product():
             db.execute(
                 "INSERT INTO Collections (user_id, product_id) VALUES (?, ?)",
                 (session["user_id"], new_product_id)
+            )
+
+            # Add expiration into reminders
+            alarm_date = datetime.now() + timedelta(shelf_life)
+            db.execute(
+                """INSERT INTO Reminders (reminder_type, alarm_date, recurrence, user_id, product_id)
+               VALUES ("product shelf life / expiration", ?, ?, ?, ?)""",
+                (
+                    alarm_date,
+                    shelf_life,
+                    session["user_id"],
+                    product_id,
+                ),
             )
 
         db.commit()
