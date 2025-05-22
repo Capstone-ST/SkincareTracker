@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 
 reminder_bp = Blueprint("reminder", __name__, template_folder="../templates/reminder")
@@ -127,3 +127,40 @@ def edit_reminder(id):
 
     db.close()
     return render_template("edit_reminder.html", products=products, data=data)
+
+
+def days_to_timedelta(days_float: float) -> timedelta:
+    total_seconds = days_float * 86400 
+    return timedelta(seconds=total_seconds)
+
+@reminder_bp.route("/reminder/update/<int:id>")
+@reminder_bp.route("/update/<int:id>", methods=["GET", "POST"])
+def update_reminder(id):
+    db = __import__("app").app.get_db_connection()
+    data = db.execute("SELECT * FROM Reminders WHERE reminder_id=?", (id,)).fetchone()
+
+    print("THIS IS THE DATA----->",data)
+    print("THIS IS THE DATA----->", data["recurrence"])
+    print("THIS IS THE DATA----->",data[3])
+
+    if data["recurrence"] is not None:
+        now = datetime.now()
+        new_alarm_date = now + days_to_timedelta(data["recurrence"])
+
+        db.execute(
+            """
+            UPDATE Reminders
+            SET alarm_date = ?
+            WHERE reminder_id = ?
+            """,
+            (
+                new_alarm_date,
+                id,
+            ),
+        )
+    else:
+        delete_product(id)
+    db.commit()
+    db.close()
+    return redirect("/reminder")
+

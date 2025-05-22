@@ -9,6 +9,7 @@ home_bp = Blueprint("home", __name__, template_folder="../templates/")
 
 
 @home_bp.route("/")
+@home_bp.route("/home")
 @home_bp.route("/homepage")
 def view_home():
     if "user_id" not in session:

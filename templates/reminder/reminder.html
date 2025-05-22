@@ -21,6 +21,7 @@
                         <th>Product</th>
                         <th>Recurrence</th>
                         <th>Deadline</th>
+                        <th>Done?</th>
                         <th>Note</th>
                         <th>Actions</th>
                         <!-- <th>Status</th> -->
@@ -35,6 +36,7 @@
                         <td>{{ r.product_name }}</td>
                         <td> {{ r.recurrence }} days</td>
                         <td>{{ r.alarm_date }}</td>
+                        <td><a href="reminder/update/{{ r.reminder_id }}">✅</a></td>
                         <td>{{ r.reminder_note }}</td>
                         <td>
                             <a href="reminder/edit/{{ r.reminder_id }}">✎ Edit</a> |
