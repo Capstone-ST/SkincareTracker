@@ -38,17 +38,17 @@
                     {% for entry in diary_entries %}
                     <tr>
                         {% set dt = entry.date.split(' ') %}
-<td>
-  {{ dt[0] }}<br>
-  {% if dt|length > 1 %}
-    {% set t = dt[1].split(':') %}
-    {% set hour = t[0]|int %}
-    {% set minute = t[1] %}
-    {% set am_pm = "AM" if hour < 12 else "PM" %}
-    {% set hour12 = 12 if hour == 0 else (hour if hour <= 12 else hour - 12) %}
-    <small style="color: gray;">{{ '%02d' % hour12 }}:{{ minute }} {{ am_pm }}</small>
-  {% endif %}
-</td>
+                        <td>
+                        {{ dt[0] }}<br>
+                        {% if dt|length > 1 %}
+                            {% set t = dt[1].split(':') %}
+                            {% set hour = t[0]|int %}
+                            {% set minute = t[1] %}
+                            {% set am_pm = "AM" if hour < 12 else "PM" %}
+                            {% set hour12 = 12 if hour == 0 else (hour if hour <= 12 else hour - 12) %}
+                            <small style="color: gray;">{{ '%02d' % hour12 }}:{{ minute }} {{ am_pm }}</small>
+                        {% endif %}
+                        </td>
 
                         <td>{{ entry.product_name or "N/A" }}</td>
                         <td>{{ 'Yes' if entry.acne else 'No' }}</td>

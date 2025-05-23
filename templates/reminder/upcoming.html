@@ -6,7 +6,19 @@
         <strong>{{ upcoming.reminder_type }}</strong>
         {% if upcoming.product_name %} for <strong>{{ upcoming.product_name }}</strong>{% endif %}
         at 
-        <strong>{{ upcoming.alarm_date }}</strong>
+        <strong>
+            {% set dt = upcoming.alarm_date.split(' ') %}
+            <td>
+                {{ dt[0] }}<br>
+                {% if dt|length > 1 %}
+                    {% set t = dt[1].split(':') %}
+                    {% set hour = t[0]|int %}
+                    {% set minute = t[1] %}
+                    {% set am_pm = "AM" if hour < 12 else "PM" %} {% set hour12=12 if hour==0 else (hour if hour <=12 else hour - 12) %}
+                    {{ '%02d' % hour12 }}:{{ minute }} {{ am_pm }}
+                {% endif %}
+            </td>
+        </strong>
         &nbsp;&nbsp;
         <a href="reminder/update/{{ upcoming.reminder_id }}" title="Click on the check if you have completed this reminder">✅</a>
     </div>

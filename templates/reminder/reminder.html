@@ -35,7 +35,19 @@
                         <td>{{ r.reminder_type|capitalize }} </td>
                         <td>{{ r.product_name }}</td>
                         <td> {{ r.recurrence }} days</td>
-                        <td>{{ r.alarm_date }}</td>
+                        <td>
+                            {% set dt = r.alarm_date.split(' ') %}
+                            
+                                {{ dt[0] }}<br>
+                                {% if dt|length > 1 %}
+                                {% set t = dt[1].split(':') %}
+                                {% set hour = t[0]|int %}
+                                {% set minute = t[1] %}
+                                {% set am_pm = "AM" if hour < 12 else "PM" %} {% set hour12=12 if hour==0 else (hour if hour <=12 else hour - 12) %}
+                                    <small style="color: gray;">{{ '%02d' % hour12 }}:{{ minute }} {{ am_pm }}</small>
+                                    {% endif %}
+                            
+                        </td>
                         <td><a href="reminder/update/{{ r.reminder_id }}">✅</a></td>
                         <td>{{ r.reminder_note }}</td>
                         <td>

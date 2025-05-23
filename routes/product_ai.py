@@ -2,7 +2,7 @@ from langchain_openai import ChatOpenAI
 import os
 
 def generate_product_description(product_name):
-    os.environ["OPENAI_API_KEY"] = ""
+    # os.environ["OPENAI_API_KEY"] = ""
 
 
     llm = ChatOpenAI(
