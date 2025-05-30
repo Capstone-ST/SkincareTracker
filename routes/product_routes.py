@@ -113,11 +113,11 @@ def add_product():
         product_type = request.form.get("type")
         amazon_link = request.form.get("amazon_link")
         directions = request.form.get("directions")
-        shelf_life = request.form.get("shelf_life")
+        shelf_life = int(request.form.get("shelf_life"))  # 🛠️ Fix here
         ingredients = request.form.get("ingredients")
 
         if product_id:
-            #  Update existing product
+            # Update existing product
             db.execute(
                 """
                 UPDATE Products
@@ -130,7 +130,7 @@ def add_product():
                 )
             )
         else:
-            #  Add new product
+            # Add new product
             cursor = db.execute(
                 """
                 INSERT INTO Products (user_id, product_name, type, amazon_link, directions, shelflife, ingredients)
@@ -143,22 +143,22 @@ def add_product():
             )
             new_product_id = cursor.lastrowid
 
-            #  Add to collection
+            # Add to collection
             db.execute(
                 "INSERT INTO Collections (user_id, product_id) VALUES (?, ?)",
                 (session["user_id"], new_product_id)
             )
 
             # Add expiration into reminders
-            alarm_date = datetime.now() + timedelta(shelf_life)
+            alarm_date = datetime.now() + timedelta(days=shelf_life)
             db.execute(
                 """INSERT INTO Reminders (reminder_type, alarm_date, recurrence, user_id, product_id)
-               VALUES ("product shelf life / expiration", ?, ?, ?, ?)""",
+                   VALUES ("product shelf life / expiration", ?, ?, ?, ?)""",
                 (
                     alarm_date,
                     shelf_life,
                     session["user_id"],
-                    product_id,
+                    new_product_id,
                 ),
             )
 
