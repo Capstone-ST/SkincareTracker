@@ -1,8 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session, abort
 import os
 import datetime
 from werkzeug.utils import secure_filename
 
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+UPLOAD_FOLDER = "static/uploads/reviews"
 review_bp = Blueprint("review", __name__, template_folder="../templates/review")
 
 
