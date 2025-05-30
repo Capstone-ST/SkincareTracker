@@ -12,7 +12,15 @@
       <div class="product-grid">
         {% for product in products_list %}
         <a href="{{ url_for('product.view_product', product_id=product.id) }}"
-           class="product-card">
+          class="product-card">
+          {% if product.product_pic %}
+            <img src="{{ url_for('static', filename='images/' + product.product_pic) }}"
+                alt="{{ product.product_name }}"
+                class="product-thumbnail"
+                style="width: 300px; height: 200px; object-fit: cover; border-radius: 12px; display: block; margin: 0 auto 20px;">
+          {% else %}
+            <div class="product-placeholder">No Image</div>
+          {% endif %}
           <h3 class="product-name">{{ product.product_name }}</h3>
         </a>
         {% endfor %}

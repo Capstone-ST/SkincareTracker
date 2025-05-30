@@ -22,7 +22,8 @@ def view_all_product():
           product_id AS id,
           product_name,
           amazon_link,
-          ingredients
+          ingredients,
+          product_pic
         FROM Products
         ORDER BY product_id
     """).fetchall()
@@ -115,30 +116,44 @@ def add_product():
         directions = request.form.get("directions")
         shelf_life = request.form.get("shelf_life")
         ingredients = request.form.get("ingredients")
+        pic_file = request.files.get("product_pic")
+        filename = None
+
+        if pic_file and pic_file.filename:
+            filename = secure_filename(pic_file.filename)
+            save_path = os.path.join("static", "images", filename)
+            pic_file.save(save_path)
 
         if product_id:
             #  Update existing product
-            db.execute(
-                """
-                UPDATE Products
-                SET product_name=?, type=?, amazon_link=?, directions=?, shelflife=?, ingredients=?
-                WHERE product_id=?
-                """,
-                (
-                    name, product_type, amazon_link,
-                    directions, shelf_life, ingredients, product_id
+            if filename:
+                db.execute(
+                    """
+                    UPDATE Products
+                    SET product_name=?, type=?, amazon_link=?, directions=?, shelflife=?, ingredients=?, product_pic=?
+                    WHERE product_id=?
+                    """,
+                    (name, product_type, amazon_link, directions, shelf_life, ingredients, filename, product_id)
                 )
-            )
+            else:
+                db.execute(
+                    """
+                    UPDATE Products
+                    SET product_name=?, type=?, amazon_link=?, directions=?, shelflife=?, ingredients=?
+                    WHERE product_id=?
+                    """,
+                    (name, product_type, amazon_link, directions, shelf_life, ingredients, product_id)
+                )
         else:
             #  Add new product
             cursor = db.execute(
                 """
-                INSERT INTO Products (user_id, product_name, type, amazon_link, directions, shelflife, ingredients)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO Products (user_id, product_name, type, amazon_link, directions, shelflife, ingredients, product_pic)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     session["user_id"], name, product_type,
-                    amazon_link, directions, shelf_life, ingredients
+                    amazon_link, directions, shelf_life, ingredients, filename
                 )
             )
             new_product_id = cursor.lastrowid
@@ -150,7 +165,7 @@ def add_product():
             )
 
             # Add expiration into reminders
-            alarm_date = datetime.now() + timedelta(shelf_life)
+            alarm_date = datetime.now() + timedelta(int(shelf_life))
             db.execute(
                 """INSERT INTO Reminders (reminder_type, alarm_date, recurrence, user_id, product_id)
                VALUES ("product shelf life / expiration", ?, ?, ?, ?)""",

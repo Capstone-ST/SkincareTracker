@@ -4,8 +4,8 @@
 
 <div class="content-wrapper">
 
-  <a href="{{ url_for('home.view_home') }}" class="corner-back-btn">
-      ← Back to Home
+  <a href="{{ url_for('product.view_all_product') }}" class="corner-back-btn">
+      ← Back to All Products
   </a>
 
   <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; margin: 0 auto; max-width: 1200px;">
@@ -16,8 +16,8 @@
       
       {% if product.product_pic %}
       <img src="{{ url_for('static', filename='images/' + product.product_pic) }}"
-           alt="{{ product.product_name }}"
-           style="max-width: 100%; border-radius: 12px; display: block; margin: 0 auto 20px;">
+          alt="{{ product.product_name }}"
+          style="width: 300px; height: 300px; object-fit: cover; border-radius: 12px; display: block; margin: 0 auto 20px;">
       {% endif %}
 
       <table class="product-details" style="width: 100%; border-collapse: collapse;">
