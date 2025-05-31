@@ -29,6 +29,7 @@
             <label for="product_id" class="form-label">Product (optional):</label>
             <select class="form-select" id="product_id" name="product_id">
                 <!-- <option value="{{data.product_id}}">{{data.product_name }}</option> -->
+                 <option>-- None --</option>
                 {% for product in products %}
                 <option value="{{ product.product_id }}" {% if product.product_id == data.product_id %}selected{% endif %}>
                     {{ product.product_name }}

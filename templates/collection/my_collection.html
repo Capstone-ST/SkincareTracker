@@ -4,6 +4,8 @@
 <!-- Back to Home Floating Button -->
 <a href="{{ url_for('home.view_home') }}" class="corner-back-btn">← Back to Home</a>
 
+
+
 <div class="products-page">
     <h1 class="products-title">Your Products</h1>
 
@@ -40,6 +42,24 @@
             {% endfor %}
         </div>
     </div>
+
+    <!-- Smart Recommendation Button -->
+    <div style="text-align: center; margin-top: 30px;">
+        <form action="{{ url_for('collection.product_rec') }}" method="POST">
+            <button type="submit" class="ai-btn" >
+                🧠 Smart Recommendation
+            </button>
+        </form>
+    </div>
+    <!-- Flash message for AI output -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div id="product_rec" class="flash-message {{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
 </div>
 
 <!-- Styling -->
@@ -134,5 +154,61 @@
     .corner-back-btn:hover {
         background-color: #f06292;
     }
+
+.ai-btn {
+    background-color: #ffc1d3;
+    color: #5e0b1f;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.ai-btn:hover {
+    background-color: #f06292;
+    color: white;
+}
+
+.delete-btn {
+    background: none;
+    color: #e91e63;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.flash-message.info {
+    background-color: #fff0f5;
+    border-left: 4px solid #f06292;
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 600px;
+    font-family: 'Poppins';
+    border-radius: 8px;
+}
+.flash-message.warning {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    color: #856404;
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 600px;
+    font-family: 'Poppins';
+    border-radius: 8px;
+}
+.flash-message.danger {
+    background-color: #f8d7da;
+    border-left: 4px solid #dc3545;
+    color: #721c24;
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 600px;
+    font-family: 'Poppins';
+    border-radius: 8px;
+}
 </style>
 {% endblock %}
