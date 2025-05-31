@@ -14,22 +14,28 @@ def view_all_product():
     if "user_id" not in session:
         return redirect("/user/login")
 
+    user_id = session["user_id"]
     db = __import__("app").app.get_db_connection()
 
-    # Show all products from all users
     products = db.execute("""
         SELECT
-          product_id AS id,
-          product_name,
-          amazon_link,
-          ingredients,
-          product_pic
+            product_id AS id,
+            product_name,
+            amazon_link,
+            ingredients,
+            product_pic
         FROM Products
         ORDER BY product_id
     """).fetchall()
 
+    in_collection = db.execute("""
+        SELECT product_id FROM Collections WHERE user_id = ?
+    """, (user_id,)).fetchall()
+    in_collection_ids = {row["product_id"] for row in in_collection}
+
     db.close()
-    return render_template("product/all_products.html", products_list=products)
+    return render_template("product/all_products.html", products_list=products, in_collection_ids=in_collection_ids)
+
 
 def extract_type_from_categories(categories):
     if not categories:
@@ -311,4 +317,29 @@ def view_product(product_id):
         user_has_reviewed=user_has_reviewed,
         back_url=back_url
     )
+
+@product_bp.route("/add_to_collection/<int:product_id>", methods=["POST"])
+def add_to_collection(product_id):
+    if "user_id" not in session:
+        return redirect("/user/login")
+
+    user_id = session["user_id"]
+    db = __import__("app").app.get_db_connection()
+
+
+    exists = db.execute(
+        "SELECT 1 FROM Collections WHERE user_id=? AND product_id=?",
+        (user_id, product_id)
+    ).fetchone()
+
+    if not exists:
+        db.execute(
+            "INSERT INTO Collections (user_id, product_id) VALUES (?, ?)",
+            (user_id, product_id)
+        )
+        db.commit()
+
+    db.close()
+    return redirect(url_for("product.view_all_product"))
+
 
