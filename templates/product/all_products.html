@@ -8,7 +8,7 @@
 
   <div class="all-products-container">
     <h1 class="page-title">🧴 All Products</h1>
-    <div class="product-scroll-wrapper">
+    <div class="product-grid-wrapper">
       <div class="product-grid">
         {% for product in products_list %}
         <a href="{{ url_for('product.view_product', product_id=product.id) }}"

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session, abort
 import os
 import requests
 from datetime import datetime, timedelta
@@ -114,7 +114,7 @@ def add_product():
         product_type = request.form.get("type")
         amazon_link = request.form.get("amazon_link")
         directions = request.form.get("directions")
-        shelf_life = request.form.get("shelf_life")
+        shelf_life = int(request.form.get("shelf_life"))
         ingredients = request.form.get("ingredients")
         pic_file = request.files.get("product_pic")
         filename = None
@@ -145,7 +145,7 @@ def add_product():
                     (name, product_type, amazon_link, directions, shelf_life, ingredients, product_id)
                 )
         else:
-            #  Add new product
+            # Add new product
             cursor = db.execute(
                 """
                 INSERT INTO Products (user_id, product_name, type, amazon_link, directions, shelflife, ingredients, product_pic)
@@ -158,22 +158,22 @@ def add_product():
             )
             new_product_id = cursor.lastrowid
 
-            #  Add to collection
+            # Add to collection
             db.execute(
                 "INSERT INTO Collections (user_id, product_id) VALUES (?, ?)",
                 (session["user_id"], new_product_id)
             )
 
             # Add expiration into reminders
-            alarm_date = datetime.now() + timedelta(int(shelf_life))
+            alarm_date = datetime.now() + timedelta(days=int(shelf_life))
             db.execute(
                 """INSERT INTO Reminders (reminder_type, alarm_date, recurrence, user_id, product_id)
-               VALUES ("product shelf life / expiration", ?, ?, ?, ?)""",
+                   VALUES ("product shelf life / expiration", ?, ?, ?, ?)""",
                 (
                     alarm_date,
                     shelf_life,
                     session["user_id"],
-                    product_id,
+                    new_product_id,
                 ),
             )
 
@@ -297,11 +297,18 @@ def view_product(product_id):
 
     db.close()
 
+    ref = request.referrer or ""
+    if "collection" in ref:
+        back_url = url_for("collection.my_collection")
+    else:
+        back_url = url_for("product.view_all_product")
+
     return render_template(
         "product/product_info.html",
         product=product,
         product_reviews=reviews,
         shared_diaries=shared_diaries,
-        user_has_reviewed=user_has_reviewed
+        user_has_reviewed=user_has_reviewed,
+        back_url=back_url
     )
 
