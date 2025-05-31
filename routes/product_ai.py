@@ -1,10 +1,9 @@
 from langchain_openai import ChatOpenAI
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 def generate_product_description(product_name):
-    # os.environ["OPENAI_API_KEY"] = ""
-
-
     llm = ChatOpenAI(
         model="gpt-4.1-nano", 
         )

@@ -10,7 +10,7 @@ def my_collection():
     db = __import__("app").app.get_db_connection()
     products = db.execute(
         """
-        SELECT P.product_id, P.product_name, P.type, P.amazon_link, P.directions, P.shelflife, P.ingredients
+        SELECT P.product_id, P.product_name, P.type, P.amazon_link, P.directions, P.shelflife, P.ingredients, P.product_pic
         FROM Products P
         JOIN Collections C ON P.product_id = C.product_id
         WHERE C.user_id = ?
