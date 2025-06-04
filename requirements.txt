@@ -2,3 +2,4 @@ Flask
 langchain_openai
 Requests
 Werkzeug
+dotenv
