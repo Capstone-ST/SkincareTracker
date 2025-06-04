@@ -9,6 +9,8 @@ from routes.review_routes import review_bp
 from routes.collection_routes import collection_bp
 from routes.reminder_routes import reminder_bp
 
+import database.db_connector as db
+
 
 import os
 
@@ -27,13 +29,11 @@ app.config["SESSION_TYPE"] = "filesystem"
 # Register Blueprints
 app.register_blueprint(diary_bp, url_prefix="/diary")
 app.register_blueprint(reminder_bp, url_prefix="/reminder")
-app.register_blueprint(user_bp, url_prefix="/user")  
+app.register_blueprint(user_bp, url_prefix="/user")
 app.register_blueprint(product_bp)
-app.register_blueprint( review_bp, url_prefix="/review")  
+app.register_blueprint(review_bp, url_prefix="/review")
 app.register_blueprint(home_bp, url_prefix="/")
 app.register_blueprint(collection_bp)
-
-# app.register_blueprint( , url_prefix="/")
 
 
 @app.route("/api/featured-products")
@@ -69,9 +69,11 @@ def featured_products():
 
 # DB helper
 def get_db_connection():
-    conn = sqlite3.connect(st_db)
-    conn.row_factory = sqlite3.Row
-    return conn
+    # conn = sqlite3.connect(st_db)
+    # conn.row_factory = sqlite3.Row
+    # return conn
+
+    return db.connect_to_database()
 
 
 # Make get_db_connection globally available

@@ -7,11 +7,11 @@
 
 <!-- Flash message for AI output -->
 {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    {% for category, message in messages %}
-      <div class="flash-message {{ category }}">{{ message }}</div>
-    {% endfor %}
-  {% endif %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="flash-message {{ category }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
 {% endwith %}
 
 <div class="diary-page">
@@ -37,17 +37,10 @@
                 <tbody>
                     {% for entry in diary_entries %}
                     <tr>
-                        {% set dt = entry.date.split(' ') %}
+                        {% set dt = entry.date %}
                         <td>
-                        {{ dt[0] }}<br>
-                        {% if dt|length > 1 %}
-                            {% set t = dt[1].split(':') %}
-                            {% set hour = t[0]|int %}
-                            {% set minute = t[1] %}
-                            {% set am_pm = "AM" if hour < 12 else "PM" %}
-                            {% set hour12 = 12 if hour == 0 else (hour if hour <= 12 else hour - 12) %}
-                            <small style="color: gray;">{{ '%02d' % hour12 }}:{{ minute }} {{ am_pm }}</small>
-                        {% endif %}
+                            {{ dt }}<br>
+
                         </td>
 
                         <td>{{ entry.product_name or "N/A" }}</td>
@@ -56,19 +49,19 @@
                         <td>{{ 'Yes' if entry.shared else 'No' }}</td>
                         <td>
                             {% if entry.diary_photo %}
-                                <img src="{{ url_for('static', filename='uploads/' ~ entry.diary_photo) }}"
-                                     alt="{{ entry.diary_photo }}" class="img-fluid"
-                                     style="max-height: 100px; max-width: 120px; object-fit: contain;">
-                                <p style="font-size: 10px; color: gray;">{{ entry.diary_photo }}</p>
+                            <img src="{{ url_for('static', filename='uploads/' ~ entry.diary_photo) }}"
+                                alt="{{ entry.diary_photo }}" class="img-fluid"
+                                style="max-height: 100px; max-width: 120px; object-fit: contain;">
+                            <p style="font-size: 10px; color: gray;">{{ entry.diary_photo }}</p>
                             {% else %}
-                                No Photo
+                            No Photo
                             {% endif %}
                         </td>
                         <td>
                             <a href="{{ url_for('diary.edit_diary', diary_id=entry.diary_id) }}">✎ Edit</a> |
-                            <form action="{{ url_for('diary.delete_diary', diary_id=entry.diary_id) }}"
-                                  method="POST" style="display:inline;"
-                                  onsubmit="return confirm('Are you sure you want to delete this diary entry?');">
+                            <form action="{{ url_for('diary.delete_diary', diary_id=entry.diary_id) }}" method="POST"
+                                style="display:inline;"
+                                onsubmit="return confirm('Are you sure you want to delete this diary entry?');">
                                 <button type="submit" class="delete-btn">🗑️ Delete</button>
                             </form>
                         </td>
@@ -84,141 +77,141 @@
 
     <!-- Smart Summary Button -->
     <div style="text-align: center; margin-top: 30px;">
-      <form action="{{ url_for('diary.smart_summary') }}" method="POST">
-        <button type="submit" class="ai-btn">
-          🧠 Smart Summary
-        </button>
-      </form>
+        <form action="{{ url_for('diary.smart_summary') }}" method="POST">
+            <button type="submit" class="ai-btn">
+                🧠 Smart Summary
+            </button>
+        </form>
     </div>
 </div>
 
 <style>
-.diary-page {
-    padding: 30px;
-}
+    .diary-page {
+        padding: 30px;
+    }
 
-.diary-title {
-    text-align: center;
-    font-family: 'Dancing Script', cursive;
-    color: #e91e63;
-    font-size: 32px;
-    margin-bottom: 20px;
-}
+    .diary-title {
+        text-align: center;
+        font-family: 'Dancing Script', cursive;
+        color: #e91e63;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
 
-.diary-table-wrapper {
-    max-height: 500px;
-    overflow-y: auto;
-    border-radius: 10px;
-    border: 2px solid #ffc1d3;
-    background: #fff0f5;
-    padding: 20px;
-}
+    .diary-table-wrapper {
+        max-height: 500px;
+        overflow-y: auto;
+        border-radius: 10px;
+        border: 2px solid #ffc1d3;
+        background: #fff0f5;
+        padding: 20px;
+    }
 
-.diary-table table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-}
+    .diary-table table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+    }
 
-.diary-table th, .diary-table td {
-    border-bottom: 1px solid #ffc1d3;
-    padding: 10px;
-    text-align: left;
-    vertical-align: top;
-}
+    .diary-table th,
+    .diary-table td {
+        border-bottom: 1px solid #ffc1d3;
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+    }
 
-.diary-table th {
-    background-color: #ffc1d3;
-    color: white;
-    font-weight: 600;
-}
+    .diary-table th {
+        background-color: #ffc1d3;
+        color: white;
+        font-weight: 600;
+    }
 
-.diary-table img {
-    max-height: 100px;
-    max-width: 120px;
-    object-fit: contain;
-    border-radius: 8px;
-}
+    .diary-table img {
+        max-height: 100px;
+        max-width: 120px;
+        object-fit: contain;
+        border-radius: 8px;
+    }
 
-.corner-back-btn {
-    position: fixed;
-    top: 100px;
-    left: 20px;
-    background-color: #ffc1d3;
-    color: white;
-    font-weight: bold;
-    padding: 10px 18px;
-    border-radius: 10px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-    z-index: 999;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: background 0.2s ease-in-out;
-}
+    .corner-back-btn {
+        position: fixed;
+        top: 100px;
+        left: 20px;
+        background-color: #ffc1d3;
+        color: white;
+        font-weight: bold;
+        padding: 10px 18px;
+        border-radius: 10px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 14px;
+        z-index: 999;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background 0.2s ease-in-out;
+    }
 
-.corner-back-btn:hover {
-    background-color: #f06292;
-}
+    .corner-back-btn:hover {
+        background-color: #f06292;
+    }
 
-.ai-btn {
-    background-color: #ffc1d3;
-    color: #5e0b1f;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
+    .ai-btn {
+        background-color: #ffc1d3;
+        color: #5e0b1f;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
-.ai-btn:hover {
-    background-color: #f06292;
-    color: white;
-}
+    .ai-btn:hover {
+        background-color: #f06292;
+        color: white;
+    }
 
-.delete-btn {
-    background: none;
-    color: #e91e63;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 14px;
-}
+    .delete-btn {
+        background: none;
+        color: #e91e63;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 14px;
+    }
 
-.flash-message.info {
-    background-color: #fff0f5;
-    border-left: 4px solid #f06292;
-    padding: 15px;
-    margin: 20px auto;
-    max-width: 600px;
-    font-family: 'Poppins';
-    border-radius: 8px;
-}
-.flash-message.warning {
-    background-color: #fff3cd;
-    border-left: 4px solid #ffc107;
-    color: #856404;
-    padding: 15px;
-    margin: 20px auto;
-    max-width: 600px;
-    font-family: 'Poppins';
-    border-radius: 8px;
-}
-.flash-message.danger {
-    background-color: #f8d7da;
-    border-left: 4px solid #dc3545;
-    color: #721c24;
-    padding: 15px;
-    margin: 20px auto;
-    max-width: 600px;
-    font-family: 'Poppins';
-    border-radius: 8px;
-}
+    .flash-message.info {
+        background-color: #fff0f5;
+        border-left: 4px solid #f06292;
+        padding: 15px;
+        margin: 20px auto;
+        max-width: 600px;
+        font-family: 'Poppins';
+        border-radius: 8px;
+    }
+
+    .flash-message.warning {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        color: #856404;
+        padding: 15px;
+        margin: 20px auto;
+        max-width: 600px;
+        font-family: 'Poppins';
+        border-radius: 8px;
+    }
+
+    .flash-message.danger {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+        padding: 15px;
+        margin: 20px auto;
+        max-width: 600px;
+        font-family: 'Poppins';
+        border-radius: 8px;
+    }
 </style>
 {% endblock %}
-
-
-

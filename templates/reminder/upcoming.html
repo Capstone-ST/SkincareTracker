@@ -1,38 +1,32 @@
 <div class="upcoming">
-    
+
     {% if upcoming %}
     <div>
         🔔 Next Reminder:
         <strong>{{ upcoming.reminder_type }}</strong>
         {% if upcoming.product_name %} for <strong>{{ upcoming.product_name }}</strong>{% endif %}
-        at 
+        at
         <strong>
-            {% set dt = upcoming.alarm_date.split(' ') %}
+            {% set dt = upcoming.alarm_date %}
+
             <td>
-                {{ dt[0] }}<br>
-                {% if dt|length > 1 %}
-                    {% set t = dt[1].split(':') %}
-                    {% set hour = t[0]|int %}
-                    {% set minute = t[1] %}
-                    {% set am_pm = "AM" if hour < 12 else "PM" %} {% set hour12=12 if hour==0 else (hour if hour <=12 else hour - 12) %}
-                    {{ '%02d' % hour12 }}:{{ minute }} {{ am_pm }}
-                {% endif %}
+                {{ dt }}<br>
+
             </td>
         </strong>
         &nbsp;&nbsp;
-        <a href="reminder/update/{{ upcoming.reminder_id }}" title="Click on the check if you have completed this reminder">✅</a>
+        <a href="reminder/update/{{ upcoming.reminder_id }}"
+            title="Click on the check if you have completed this reminder">✅</a>
     </div>
     {% else %}
-        No upcoming reminders loaded
+    No upcoming reminders loaded
     {% endif %}
 </div>
 
 <style>
-
-.upcoming {
-    background-color:white;
-    border: solid red;
-    padding: 5px;
-}
-
+    .upcoming {
+        background-color: white;
+        border: solid red;
+        padding: 5px;
+    }
 </style>
