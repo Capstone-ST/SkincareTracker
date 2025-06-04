@@ -25,7 +25,7 @@ python app.py
 - Users must be connected to the OSU VPN in order to view the running website. 
 - The SQL backend version of the website is hosted on the OSU server and can be accessed here: 
 http://flip4.engr.oregonstate.edu:41103/
-- The SQLite backend version (optional): http://flip4.engr.oregonstate.edu:41102/
+- The SQLite backend version (optional): http://flip3.engr.oregonstate.edu:41102/ 
 - Here is a set of testing credentials to log in to the website:
     * Username: admin
     * Password: 123
