@@ -10,7 +10,9 @@
     <h1 class="reminders-title">Your Reminders</h1>
 
     <a href="reminder/add" class="btn btn-primary mt-4">➕ Add New Reminder</a>
-    <div><p> </p></div>
+    <div>
+        <p> </p>
+    </div>
 
     <div class="reminder-table-wrapper mt-4">
         <div class="reminder-table">
@@ -36,17 +38,10 @@
                         <td>{{ r.product_name }}</td>
                         <td> {{ r.recurrence }} days</td>
                         <td>
-                            {% set dt = r.alarm_date.split(' ') %}
-                            
-                                {{ dt[0] }}<br>
-                                {% if dt|length > 1 %}
-                                {% set t = dt[1].split(':') %}
-                                {% set hour = t[0]|int %}
-                                {% set minute = t[1] %}
-                                {% set am_pm = "AM" if hour < 12 else "PM" %} {% set hour12=12 if hour==0 else (hour if hour <=12 else hour - 12) %}
-                                    <small style="color: gray;">{{ '%02d' % hour12 }}:{{ minute }} {{ am_pm }}</small>
-                                    {% endif %}
-                            
+                            {% set dt = r.alarm_date %}
+
+                            {{ dt }}<br>
+
                         </td>
                         <td><a href="reminder/update/{{ r.reminder_id }}">✅</a></td>
                         <td>{{ r.reminder_note }}</td>
@@ -63,10 +58,10 @@
                     {% else %}
                     <p>No reminders found.</p>
                     {% endif %}
-                
+
                 </tbody>
 
-                    <!-- <button>
+                <!-- <button>
                         <a href="reminder/add" class="btn btn-primary mt-4">Add New Reminder</a>
                     </button> -->
 

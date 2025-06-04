@@ -1,17 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 import os
 from werkzeug.utils import secure_filename
+import database.db_connector as db
 
 user_bp = Blueprint("user", __name__, template_folder="../templates/user")
 
-# cwd = os.getcwd()
-# cwd.join("database")
-# UPLOAD_FOLDER = cwd.join("images")
-# __import__("app").app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-# PROFILE_PIC_UPLOAD_FOLDER = __import__("app").app.config["UPLOAD_FOLDER"]
-#PROFILE_PIC_UPLOAD_FOLDER = "../database/images/"
 
-PROFILE_PIC_UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "..", "static", "images")
+PROFILE_PIC_UPLOAD_FOLDER = os.path.join(
+    os.path.dirname(__file__), "..", "static", "images"
+)
 PROFILE_PIC_UPLOAD_FOLDER = os.path.abspath(PROFILE_PIC_UPLOAD_FOLDER)
 
 
@@ -23,15 +20,24 @@ def login_user():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        db = __import__("app").app.get_db_connection()
-        user = db.execute(
-            "SELECT * FROM Users WHERE username=? AND password=?",
-            (username, password),
-        ).fetchone()
-        db.close()
+
+        conn = __import__("app").app.get_db_connection()
+        cursor = conn.cursor()
+        query = "SELECT * FROM Users WHERE username=%s AND password=%s"
+        cursor = db.execute_query(
+            conn,
+            query=query,
+            query_params=(
+                username,
+                password,
+            ),
+        )
+        user = cursor.fetchone()
+        conn.close()
+
         if user:
             print("THIS IS THE USER:", user)
-            session["user_id"] = user[0]
+            session["user_id"] = user["user_id"]
             return render_template("/homepage.html")
         else:
             error = "Ran into issues trying to login"
@@ -47,17 +53,24 @@ def register():
         email = request.form["email"]
         age = request.form["age"]
         skintype = request.form["skintype"]
-        db = __import__("app").app.get_db_connection()
+
+        conn = __import__("app").app.get_db_connection()
+
         try:
-            db.execute(
-                """
-                INSERT INTO Users (username, password, email, age, skintype)
-                VALUES (?, ?, ?, ?, ?)
-                """,
-                (username, password, email, age, skintype),
+            cursor = conn.cursor()
+            query = " INSERT INTO Users (username, password, email, age, skintype) VALUES (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?) "
+            cursor = db.execute_query(
+                conn,
+                query=query,
+                query_params=(
+                    username,
+                    password,
+                    email,
+                    age,
+                    skintype,
+                ),
             )
-            db.commit()
-            db.close()
+            conn.close()
 
             return redirect(url_for("user.login_user"))
 
@@ -77,32 +90,32 @@ def view_user():
     if "user_id" not in session:
         return redirect("/login")
 
-    db = __import__("app").app.get_db_connection()
-    user = db.execute(
-        "SELECT username, email, age, skintype, profile_pic FROM Users WHERE user_id=?",
-        (session["user_id"],),
-    ).fetchone()
-    db.close()
+    conn = __import__("app").app.get_db_connection()
+    cursor = conn.cursor()
+    query = (
+        "SELECT username, email, age, skintype, profile_pic FROM Users WHERE user_id=%s"
+    )
+    cursor = db.execute_query(conn, query=query, query_params=(session["user_id"],))
+    user = cursor.fetchone()
+    conn.close()
     return render_template(
         "user/profile.html",
-        user={
-            "username": user[0],
-            "email": user[1],
-            "age": user[2],
-            "skintype": user[3],
-            "picture": user[4] or 'skincare-user-icon.png'
-        },
+        user=user,
     )
 
 
 @user_bp.route("/add", methods=["GET", "POST"])
 def add_user():
-    db = __import__("app").app.get_db_connection()
+    conn = __import__("app").app.get_db_connection()
+    cursor = conn.cursor()
     if request.method == "POST":
         # handle form submission...
         pass  # for brevity
-    products = db.execute("SELECT * FROM Products").fetchall()
-    db.close()
+    cursor = db.execute_query(
+        conn, query="SELECT * FROM Products", query_params=(session["user_id"],)
+    )
+    products = cursor.fetchall()
+    conn.close()
     return render_template("user/add_user.html")
 
 
@@ -111,7 +124,9 @@ def edit_profile():
     if "user_id" not in session:
         return redirect(url_for("user.login_user"))
 
-    db = __import__("app").app.get_db_connection()
+    conn = __import__("app").app.get_db_connection()
+    cursor = conn.cursor()
+
     user_id = session["user_id"]
 
     if request.method == "POST":
@@ -126,38 +141,47 @@ def edit_profile():
             filepath = os.path.join("static/uploads", filename)
             os.makedirs("static/uploads", exist_ok=True)
             file.save(filepath)
-
-            db.execute(
-                "UPDATE Users SET profile_pic=? WHERE user_id=?",
-                (filename, user_id)
+            db.execute_query(
+                conn,
+                query="UPDATE Users SET profile_pic=%s WHERE user_id=%s",
+                query_params=(
+                    filename,
+                    user_id,
+                ),
             )
 
         # Update email, age, and skintype
-        db.execute(
-            "UPDATE Users SET email=?, age=?, skintype=? WHERE user_id=?",
-            (email, age, skintype, user_id)
+        db.execute_query(
+            conn,
+            "UPDATE Users SET email=%s, age=%s, skintype=%s WHERE user_id=%s",
+            (
+                email,
+                age,
+                skintype,
+                user_id,
+            ),
         )
 
-        db.commit()
-        db.close()
+        conn.close()
         return redirect(url_for("user.view_user"))
 
-    data = db.execute(
-        "SELECT email, age, skintype, profile_pic FROM Users WHERE user_id=?",
-        (user_id,)
-    ).fetchone()
-    db.close()
+    cursor = db.execute_query(
+        conn,
+        "SELECT email, age, skintype, profile_pic FROM Users WHERE user_id=%s",
+        (user_id,),
+    )
+    data = cursor.fetchone()
+    conn.close()
 
     return render_template(
         "user/edit_profile.html",
         user={
-            "email": data[0],
-            "age": data[1],
-            "skintype": data[2],
-            "picture": data[3]
-        }
+            "email": data["email"],
+            "age": data["age"],
+            "skintype": data["skintype"],
+            "picture": data["profile_pic"],
+        },
     )
-
 
 
 @user_bp.route("/upload_profile_picture", methods=["POST"])
@@ -175,16 +199,20 @@ def upload_profile_picture():
         file.save(filepath)
 
         # Update the database
-        db = __import__("app").app.get_db_connection()
-        db.execute(
-            "UPDATE Users SET profile_pic=? WHERE user_id=?",
-            (filename, session["user_id"]),
+        conn = __import__("app").app.get_db_connection()
+        cursor = conn.cursor()
+
+        db.execute_query(
+            conn,
+            "UPDATE Users SET profile_pic=? WHERE user_id=%s",
+            (
+                filename,
+                session["user_id"],
+            ),
         )
-        db.commit()
-        db.close()
+        conn.close()
 
     return redirect(url_for("user.view_user"))
-
 
 
 @user_bp.route("/logout")
