@@ -57,7 +57,7 @@ http://flip4.engr.oregonstate.edu:41102/user/login
      - Supports uploading an image for each product
 ![Add product Demo](https://private-user-images.githubusercontent.com/156049642/451190638-99542aca-f302-4761-ad89-8a8fba91fc0c.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDkwMTI2ODIsIm5iZiI6MTc0OTAxMjM4MiwicGF0aCI6Ii8xNTYwNDk2NDIvNDUxMTkwNjM4LTk5NTQyYWNhLWYzMDItNDc2MS1hZDg5LThhOGZiYTkxZmMwYy5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNjA0JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDYwNFQwNDQ2MjJaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04YzQ3YjQzNGQ4NjUxM2U4YjYyZjVkOGYwMjc3ZDg1Yzk2MTIyZDZiMjYzN2FkMmZlNjhmOTkwN2ZmZWEzOTE3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.OVvvjzbt4ArOKJu1tls4vHOSNYP69CCxR1l9yU6anh0)
 
-# My Collection Page: 
+# My Collection Page w/ Smart AI product recommendation: 
    - Displays a user’s personal product collection
    - Includes options to view, edit, or delete individual products
    - Allows users to track products they’re actively using and there is a Ai feature that recommends skincare products based on their collection
