@@ -1,5 +1,6 @@
 # About the SkincareTracker website
 Skincare Tracker is a full-stack web application developed as part of our CS 467 capstone project. The goal was to build a helpful, user-friendly, and visually pleasing app that supports people in managing their skincare routines. The app allows users to log skincare products, review products, create daily diary entries, receive timely reminders, and benefit from AI-generated skincare summaries/tips, product recommendation, and product usage guidance. The idea was to mix utility with thoughtful design making skincare tracking not only organized, but also engaging and personalized. It’s built to be both functional and beautiful, designed to make skincare easy, smart, and a little more fun.
+https://www.youtube.com/watch?v=QwnzN8RPMbQ
 
 # Setup Instructions
 
